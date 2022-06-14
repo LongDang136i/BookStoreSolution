@@ -1,14 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Catalog\" />
-    <Folder Include="Common\" />
-    <Folder Include="System\" />
-    <Folder Include="Utilities\" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookStore.Data\BookStore.Data.csproj" />
+    <ProjectReference Include="..\BookStore.Utilities\BookStore.Utilities.csproj" />
+    <ProjectReference Include="..\BookStore.ViewModels\BookStore.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

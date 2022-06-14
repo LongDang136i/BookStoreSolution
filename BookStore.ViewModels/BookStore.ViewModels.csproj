@@ -1,14 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Utilities\" />
-    <Folder Include="System\" />
-    <Folder Include="Common\" />
-    <Folder Include="Catalog\" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookStore.Data\BookStore.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -23,7 +23,7 @@ namespace BookStore.Utilities.Constants
             public const int NumberOfLatestProducts = 12;
         }
 
-        public class ProductConstants
+        public class DefaultValueConstant
         {
             public const string NA = "N/A";
         }

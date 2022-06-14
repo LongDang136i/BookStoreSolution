@@ -17,6 +17,22 @@
 -- Microsoft.Extensions.Configuration.FileExtensions
 -- Microsoft.Extensions.Configuration.Json
 
+- BookStore.ViewModels
+-- Microsoft.AspNetCore.Http
+-- FluentValidation.AspNetCore
+
+- BookStore.ApiIntegration
+-- Newtonsoft.Json
+
+- BookStore.Application
+-- System.IdentityModel.Tokens.Jwt
+
+
+
+
+
+
+
 ########################################################################
 ## Description Solution
 - BookStore.Data:
@@ -59,11 +75,31 @@
 
 
 
+// Note
+
+//---------------------------------------------------------------------------------//
+#region Private Menthod
 
 
+#endregion
+
+//---------------------------------------------------------------------------------//
+#region Admin App
 
 
+#endregion
 
+//---------------------------------------------------------------------------------//
+#region Web App
+
+
+#endregion
+
+//---------------------------------------------------------------------------------//
+#region Both Admin & Web App
+
+
+#endregion
 
 
 
