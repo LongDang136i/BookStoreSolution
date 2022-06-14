@@ -63,20 +63,28 @@ namespace BookStore.Data.EF
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
 
+        //-----------------------------------------------------
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+
+        //-----------------------------------------------------
 
         public DbSet<Language> Languages { get; set; }
         public DbSet<ProductTranslation> ProductTranslations { get; set; }
         public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
         public DbSet<BrandTranslation> BrandTranslations { get; set; }
 
+        //-----------------------------------------------------
+
         public DbSet<ProductInCategory> ProductInCategories { get; set; }
         public DbSet<ProductInBrand> ProductInBrands { get; set; }
 
         public DbSet<Slide> Slides { get; set; }
+
+        //-----------------------------------------------------
 
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }

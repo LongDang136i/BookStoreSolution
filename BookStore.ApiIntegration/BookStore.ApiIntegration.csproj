@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookStore.Utilities\BookStore.Utilities.csproj" />
+    <ProjectReference Include="..\BookStore.ViewModels\BookStore.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

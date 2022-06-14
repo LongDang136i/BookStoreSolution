@@ -12,5 +12,13 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BookStore.ApiIntegration\BookStore.ApiIntegration.csproj" />
+    <ProjectReference Include="..\BookStore.Application\BookStore.Application.csproj" />
+    <ProjectReference Include="..\BookStore.Data\BookStore.Data.csproj" />
+    <ProjectReference Include="..\BookStore.Utilities\BookStore.Utilities.csproj" />
+    <ProjectReference Include="..\BookStore.ViewModels\BookStore.ViewModels.csproj" />
+  </ItemGroup>
+
 
 </Project>
