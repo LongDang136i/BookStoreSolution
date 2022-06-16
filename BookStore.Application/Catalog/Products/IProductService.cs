@@ -13,29 +13,19 @@ namespace BookStore.Application.Catalog.Products
 
         #region Admin App
 
-        Task<int> Create(ProductCreateRequest request);
+        Task<int> CreateProduct(ProductCreateRequest request);
 
-        Task<int> Update(ProductUpdateRequest request);
+        Task<int> UpdateProduct(ProductUpdateRequest request);
 
-        Task<int> Delete(int productId);
+        Task<int> DeleteProduct(int productId);
 
-        //Task<bool> UpdatePrice(int productId, decimal newPrice);
+        Task<int> AddProductImage(int productId, ProductImageCreateRequest request);
 
-        //Task<bool> UpdateStock(int productId, int addedQuantity);
+        Task<int> RemoveProductImage(int imageId);
 
-        //Task AddViewcount(int productId);
-
-        Task<int> AddImage(int productId, ProductImageCreateRequest request);
-
-        Task<int> RemoveImage(int imageId);
-
-        Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
+        Task<int> UpdateProductImage(int imageId, ProductImageUpdateRequest request);
 
         Task<ApiResult<bool>> CategoryAssign(int productId, CategoryAssignRequest request);
-
-        Task<ProductImageVm> GetImageById(int imageId);
-
-        Task<List<ProductImageVm>> GetListImages(int productId);
 
         #endregion Admin App
 
@@ -53,11 +43,15 @@ namespace BookStore.Application.Catalog.Products
 
         #region Both Admin & Web App
 
-        Task<ProductVm> GetById(int productId, string languageId);
+        Task<ProductVm> GetProductById(int productId, string languageId);
 
-        Task<PagedResult<ProductVm>> GetAllPaging(GetProductPagingRequest request);
+        Task<PagedResult<ProductVm>> GetAllProductPaging(GetProductPagingRequest request);
 
-        Task<PagedResult<ProductVm>> GetAllByCategoryId(string languageId, GetProductPagingRequest request);
+        Task<PagedResult<ProductVm>> GetProductByCategoryId(string languageId, GetProductPagingRequest request);
+
+        Task<ProductImageVm> GetProductImageById(int imageId);
+
+        Task<List<ProductImageVm>> GetListProductImages(int productId);
 
         #endregion Both Admin & Web App
     }

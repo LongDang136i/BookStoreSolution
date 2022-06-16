@@ -36,7 +36,7 @@ namespace BookStore.Application.System.Users
 
         #region Admin App
 
-        public async Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request)
         {
             //Ktra nếu email nhập vào đã tồn tại ở người dùng khác
             if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
@@ -104,7 +104,7 @@ namespace BookStore.Application.System.Users
             return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
         }
 
-        public async Task<ApiResult<bool>> Delete(Guid id)
+        public async Task<ApiResult<bool>> DeleteUser(Guid id)
         {
             //Lấy ra user theo id, nếu ko tìm đc thì báo lỗi
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -235,7 +235,7 @@ namespace BookStore.Application.System.Users
             return new ApiErrorResult<bool>("Register fail");
         }
 
-        public async Task<ApiResult<UserVm>> GetById(Guid id)
+        public async Task<ApiResult<UserVm>> GetUserById(Guid id)
         {
             //Lấy và kiểm tra người dùng theo id
             var user = await _userManager.FindByIdAsync(id.ToString());

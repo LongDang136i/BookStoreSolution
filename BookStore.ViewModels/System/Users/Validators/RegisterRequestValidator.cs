@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BookStore.ViewModels.System.Users
+namespace BookStore.ViewModels.System.Users.Validators
 {
     public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {

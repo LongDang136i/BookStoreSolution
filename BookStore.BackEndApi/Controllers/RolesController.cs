@@ -9,7 +9,6 @@ namespace BookStore.BackEndApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class RolesController : ControllerBase
     {
         private readonly IRoleService _roleService;
@@ -19,6 +18,8 @@ namespace BookStore.BackEndApi.Controllers
             _roleService = roleService;
         }
 
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var roles = await _roleService.GetAll();

@@ -48,7 +48,7 @@ namespace BookStore.Application.Catalog.Products
 
         #region Admin App
 
-        public async Task<int> Create(ProductCreateRequest request)
+        public async Task<int> CreateProduct(ProductCreateRequest request)
         {
             //Lấy danh sách ngôn ngữ
             var languages = _context.Languages;
@@ -116,10 +116,12 @@ namespace BookStore.Application.Catalog.Products
             //Thêm sản phẩm vào csdl
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
+
+            //Trả về ProductId
             return product.ProductId;
         }
 
-        public async Task<int> Update(ProductUpdateRequest request)
+        public async Task<int> UpdateProduct(ProductUpdateRequest request)
         {
             //Lấy thông tin product,productTranslation theo id từ request,
             var product = await _context.Products.FindAsync(request.ProductId);
@@ -158,7 +160,7 @@ namespace BookStore.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> Delete(int productId)
+        public async Task<int> DeleteProduct(int productId)
         {
             //Lấy thông tin product,productTranslation theo id từ request,
             var product = await _context.Products.FindAsync(productId);
@@ -183,7 +185,7 @@ namespace BookStore.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> AddImage(int productId, ProductImageCreateRequest request)
+        public async Task<int> AddProductImage(int productId, ProductImageCreateRequest request)
         {
             //Tạo mới productImage gán thông tin từ request
             var productImage = new ProductImage()
@@ -206,7 +208,7 @@ namespace BookStore.Application.Catalog.Products
             return productImage.ProductImgId;
         }
 
-        public async Task<int> RemoveImage(int imageId)
+        public async Task<int> RemoveProductImage(int imageId)
         {
             //Lấy ảnh ra theo imageId
             var productImage = await _context.ProductImages.FindAsync(imageId);
@@ -218,7 +220,7 @@ namespace BookStore.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
+        public async Task<int> UpdateProductImage(int imageId, ProductImageUpdateRequest request)
         {
             //Lấy ảnh ra theo imageId và kiểm tra null
             var productImage = await _context.ProductImages.FindAsync(imageId);
@@ -233,45 +235,6 @@ namespace BookStore.Application.Catalog.Products
             }
             _context.ProductImages.Update(productImage);
             return await _context.SaveChangesAsync();
-        }
-
-        public async Task<ProductImageVm> GetImageById(int imageId)
-        {
-            //Lấy ảnh ra theo imageId
-            var image = await _context.ProductImages.FindAsync(imageId);
-            if (image == null)
-                throw new BookStoreException($"Cannot find an image with id {imageId}");
-
-            //Tạo viewModel để lưu kq và trả về
-            var viewModel = new ProductImageVm()
-            {
-                Caption = image.Caption,
-                DateCreated = image.DateCreated,
-                FileSize = image.FileSize,
-                ProductImgId = image.ProductImgId,
-                ImagePath = image.ImagePath,
-                IsDefault = image.IsDefault,
-                ProductId = image.ProductId,
-                SortOrder = image.SortOrder
-            };
-            return viewModel;
-        }
-
-        public async Task<List<ProductImageVm>> GetListImages(int productId)
-        {
-            //Lấy danh sách ảnh của product theo productId
-            return await _context.ProductImages.Where(x => x.ProductId == productId)
-                .Select(i => new ProductImageVm()
-                {
-                    Caption = i.Caption,
-                    DateCreated = i.DateCreated,
-                    FileSize = i.FileSize,
-                    ProductImgId = i.ProductImgId,
-                    ImagePath = i.ImagePath,
-                    IsDefault = i.IsDefault,
-                    ProductId = i.ProductId,
-                    SortOrder = i.SortOrder
-                }).ToListAsync();
         }
 
         public async Task<ApiResult<bool>> CategoryAssign(int productId, CategoryAssignRequest request)
@@ -308,29 +271,6 @@ namespace BookStore.Application.Catalog.Products
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();
         }
-
-        //public async Task<bool> UpdatePrice(int productId, decimal newPrice)
-        //{
-        //    var product = await _context.Products.FindAsync(productId);
-        //    if (product == null) throw new BookStoreException($"Cannot find a product with id: {productId}");
-        //    product.Price = newPrice;
-        //    return await _context.SaveChangesAsync() > 0;
-        //}
-
-        //public async Task<bool> UpdateStock(int productId, int addedQuantity)
-        //{
-        //    var product = await _context.Products.FindAsync(productId);
-        //    if (product == null) throw new BookStoreException($"Cannot find a product with id: {productId}");
-        //    product.Stock += addedQuantity;
-        //    return await _context.SaveChangesAsync() > 0;
-        //}
-
-        //public async Task AddViewcount(int productId)
-        //{
-        //    var product = await _context.Products.FindAsync(productId);
-        //    product.ViewCount += 1;
-        //    await _context.SaveChangesAsync();
-        //}
 
         #endregion Admin App
 
@@ -417,7 +357,46 @@ namespace BookStore.Application.Catalog.Products
 
         #region Both Admin & Web App
 
-        public async Task<PagedResult<ProductVm>> GetAllPaging(GetProductPagingRequest request)
+        public async Task<ProductVm> GetProductById(int productId, string languageId)
+        {
+            //Lấy ra product theo productId
+            var product = await _context.Products.FindAsync(productId);
+
+            //Lấy ra productTranslation theo productId và languageId
+            var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == languageId);
+
+            //Lấy ra categories của product
+            var categories = await (from c in _context.Categories
+                                    join ct in _context.CategoryTranslations on c.CategoryId equals ct.CategoryId
+                                    join pic in _context.ProductInCategories on c.CategoryId equals pic.CategoryId
+                                    where pic.ProductId == productId && ct.LanguageId == languageId
+                                    select ct.Name).ToListAsync();
+            //Lấy ra image mặc định của product theo productId
+            var image = await _context.ProductImages.Where(x => x.ProductId == productId && x.IsDefault == true).FirstOrDefaultAsync();
+
+            // Trả về kết quả
+            var productViewModel = new ProductVm()
+            {
+                ProductId = product.ProductId,
+                DateCreated = product.DateCreated,
+                Description = productTranslation != null ? productTranslation.Description : null,
+                LanguageId = productTranslation.LanguageId,
+                Details = productTranslation != null ? productTranslation.Details : null,
+                Name = productTranslation != null ? productTranslation.Name : null,
+                OriginalPrice = product.OriginalPrice,
+                Price = product.Price,
+                SeoAlias = productTranslation != null ? productTranslation.SeoAlias : null,
+                SeoDescription = productTranslation != null ? productTranslation.SeoDescription : null,
+                SeoTitle = productTranslation != null ? productTranslation.SeoTitle : null,
+                Stock = product.Stock,
+                ViewCount = product.ViewCount,
+                Categories = categories,
+                ThumbnailImage = image != null ? image.ImagePath : "no-image.jpg"
+            };
+            return productViewModel;
+        }
+
+        public async Task<PagedResult<ProductVm>> GetAllProductPaging(GetProductPagingRequest request)
         {
             //1. Tạo truy vấn Join:
             /*Từ p ở bảng Products
@@ -486,46 +465,7 @@ namespace BookStore.Application.Catalog.Products
             return pagedResult;
         }
 
-        public async Task<ProductVm> GetById(int productId, string languageId)
-        {
-            //Lấy ra product theo productId
-            var product = await _context.Products.FindAsync(productId);
-
-            //Lấy ra productTranslation theo productId và languageId
-            var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == languageId);
-
-            //Lấy ra categories của product
-            var categories = await (from c in _context.Categories
-                                    join ct in _context.CategoryTranslations on c.CategoryId equals ct.CategoryId
-                                    join pic in _context.ProductInCategories on c.CategoryId equals pic.CategoryId
-                                    where pic.ProductId == productId && ct.LanguageId == languageId
-                                    select ct.Name).ToListAsync();
-            //Lấy ra image mặc định của product theo productId
-            var image = await _context.ProductImages.Where(x => x.ProductId == productId && x.IsDefault == true).FirstOrDefaultAsync();
-
-            // Trả về kết quả
-            var productViewModel = new ProductVm()
-            {
-                ProductId = product.ProductId,
-                DateCreated = product.DateCreated,
-                Description = productTranslation != null ? productTranslation.Description : null,
-                LanguageId = productTranslation.LanguageId,
-                Details = productTranslation != null ? productTranslation.Details : null,
-                Name = productTranslation != null ? productTranslation.Name : null,
-                OriginalPrice = product.OriginalPrice,
-                Price = product.Price,
-                SeoAlias = productTranslation != null ? productTranslation.SeoAlias : null,
-                SeoDescription = productTranslation != null ? productTranslation.SeoDescription : null,
-                SeoTitle = productTranslation != null ? productTranslation.SeoTitle : null,
-                Stock = product.Stock,
-                ViewCount = product.ViewCount,
-                Categories = categories,
-                ThumbnailImage = image != null ? image.ImagePath : "no-image.jpg"
-            };
-            return productViewModel;
-        }
-
-        public async Task<PagedResult<ProductVm>> GetAllByCategoryId(string languageId, GetProductPagingRequest request)
+        public async Task<PagedResult<ProductVm>> GetProductByCategoryId(string languageId, GetProductPagingRequest request)
         {
             //1. Lấy ra các Products kèm ProductTranslations theo CategoryId
             var query = from p in _context.Products
@@ -570,6 +510,45 @@ namespace BookStore.Application.Catalog.Products
                 Items = data
             };
             return pagedResult;
+        }
+
+        public async Task<ProductImageVm> GetProductImageById(int imageId)
+        {
+            //Lấy ảnh ra theo imageId
+            var image = await _context.ProductImages.FindAsync(imageId);
+            if (image == null)
+                throw new BookStoreException($"Cannot find an image with id {imageId}");
+
+            //Tạo viewModel để lưu kq và trả về
+            var viewModel = new ProductImageVm()
+            {
+                Caption = image.Caption,
+                DateCreated = image.DateCreated,
+                FileSize = image.FileSize,
+                ProductImgId = image.ProductImgId,
+                ImagePath = image.ImagePath,
+                IsDefault = image.IsDefault,
+                ProductId = image.ProductId,
+                SortOrder = image.SortOrder
+            };
+            return viewModel;
+        }
+
+        public async Task<List<ProductImageVm>> GetListProductImages(int productId)
+        {
+            //Lấy danh sách ảnh của product theo productId
+            return await _context.ProductImages.Where(x => x.ProductId == productId)
+                .Select(i => new ProductImageVm()
+                {
+                    Caption = i.Caption,
+                    DateCreated = i.DateCreated,
+                    FileSize = i.FileSize,
+                    ProductImgId = i.ProductImgId,
+                    ImagePath = i.ImagePath,
+                    IsDefault = i.IsDefault,
+                    ProductId = i.ProductId,
+                    SortOrder = i.SortOrder
+                }).ToListAsync();
         }
 
         #endregion Both Admin & Web App

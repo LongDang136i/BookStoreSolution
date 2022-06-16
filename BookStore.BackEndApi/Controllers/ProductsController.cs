@@ -2,7 +2,6 @@
 using BookStore.ViewModels.Catalog.ProductImages;
 using BookStore.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -20,69 +19,47 @@ namespace BookStore.BackEndApi.Controllers
             _productService = productService;
         }
 
-        //[HttpGet("paging")]
-        //public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
-        //{
-        //    var products = await _productService.GetAllPaging(request);
-        //    return Ok(products);
-        //}
+        //---------------------------------------------------------------------------------//
 
-        [HttpGet("{productId}/{languageId}")]
-        public async Task<IActionResult> GetById(int productId, string languageId)
-        {
-            var product = await _productService.GetById(productId, languageId);
-            if (product == null)
-                return BadRequest("Cannot find product");
-            return Ok(product);
-        }
-
-        [HttpGet("featured/{languageId}/{take}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetFeaturedProducts(string languageId, int take)
-        {
-            var products = await _productService.GetFeaturedProducts(languageId, take);
-
-            return Ok(products);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("latest/{languageId}/{take}")]
-        public async Task<IActionResult> GetLatestProducts(string languageId, int take)
-        {
-            var products = await _productService.GetLatestProducts(languageId, take);
-
-            return Ok(products);
-        }
+        #region Admin App
 
         [HttpPost]
         [Consumes("multipart/form-data")]
         [Authorize]
-        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
+        public async Task<IActionResult> CreateProduct([FromForm] ProductCreateRequest request)
         {
+            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var productId = await _productService.Create(request);
+
+            //Tạo mới product và ktra kq
+            var productId = await _productService.CreateProduct(request);
             if (productId == 0)
                 return BadRequest();
 
-            var product = await _productService.GetById(productId, request.LanguageId);
+            //Lấy product vừa tạo theo productId
+            var product = await _productService.GetProductById(productId, request.LanguageId);
 
-            return CreatedAtAction(nameof(GetById), new { id = productId }, product);
+            //Trả về Status Code 201: Created
+            return CreatedAtAction(nameof(GetProductById), new { id = productId }, product);
         }
 
         [HttpPut("{productId}")]
         [Consumes("multipart/form-data")]
         [Authorize]
-        public async Task<IActionResult> Update([FromRoute] int productId, [FromForm] ProductUpdateRequest request)
+        public async Task<IActionResult> UpdateProduct([FromRoute] int productId, [FromForm] ProductUpdateRequest request)
         {
+            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             request.ProductId = productId;
-            var affectedResult = await _productService.Update(request);
+
+            //Thực hiện cập nhật và ktra kq
+            var affectedResult = await _productService.UpdateProduct(request);
             if (affectedResult == 0)
             {
                 return BadRequest();
@@ -92,9 +69,10 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpDelete("{productId}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int productId)
+        public async Task<IActionResult> DeleteProduct(int productId)
         {
-            var affectedResult = await _productService.Delete(productId);
+            //Thực hiện xóa và ktra kq
+            var affectedResult = await _productService.DeleteProduct(productId);
             if (affectedResult == 0)
             {
                 return BadRequest();
@@ -102,46 +80,41 @@ namespace BookStore.BackEndApi.Controllers
             return Ok();
         }
 
-        //Images
-
-        [HttpGet("{productId}/images/{imageId}")]
-        public async Task<IActionResult> GetImageById(int productId, int imageId)
-        {
-            var image = await _productService.GetImageById(imageId);
-            if (image == null)
-            {
-                return BadRequest("Cannot find Product");
-            }
-            return Ok(image);
-        }
-
         [HttpPost("{productId}/images")]
         [Authorize]
-        public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
+        public async Task<IActionResult> CreateProductImage(int productId, [FromForm] ProductImageCreateRequest request)
         {
+            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var imageId = await _productService.AddImage(productId, request);
+
+            //Thực hiện thêm ảnh và ktra kq
+            var imageId = await _productService.AddProductImage(productId, request);
             if (imageId == 0)
             {
                 return BadRequest();
             }
-            var image = await _productService.GetImageById(imageId);
 
-            return CreatedAtAction(nameof(GetImageById), new { id = imageId }, image);
+            //Lấy ra image theo imageId vừa tạo, trả về Statuscode 201: Created
+            var image = await _productService.GetProductImageById(imageId);
+
+            return CreatedAtAction(nameof(GetProductImageById), new { id = imageId }, image);
         }
 
         [HttpPut("{productId}/images/{imageId}")]
         [Authorize]
-        public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
+        public async Task<IActionResult> UpdateProductImage(int imageId, [FromForm] ProductImageUpdateRequest request)
         {
+            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _productService.UpdateImage(imageId, request);
+
+            //Cập nhật ảnh và ktra
+            var result = await _productService.UpdateProductImage(imageId, request);
             if (result == 0)
             {
                 return BadRequest();
@@ -151,13 +124,16 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpDelete("{productId}/images/{imageId}")]
         [Authorize]
-        public async Task<IActionResult> DeleteImage(int imageId)
+        public async Task<IActionResult> DeleteProductImage(int imageId)
         {
+            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _productService.RemoveImage(imageId);
+
+            //Xóa ảnh và ktra
+            var result = await _productService.RemoveProductImage(imageId);
             if (result == 0)
             {
                 return BadRequest();
@@ -179,5 +155,82 @@ namespace BookStore.BackEndApi.Controllers
             }
             return Ok(result);
         }
+
+        #endregion Admin App
+
+        //---------------------------------------------------------------------------------//
+
+        #region Web App
+
+        [HttpGet("featured/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFeaturedProducts(string languageId, int take)
+        {
+            //Lấy ds sản phẩm hot
+            var products = await _productService.GetFeaturedProducts(languageId, take);
+            if (products == null)
+            {
+                return BadRequest();
+            }
+            return Ok(products);
+        }
+
+        [HttpGet("latest/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLatestProducts(string languageId, int take)
+        {
+            //Lấy ds sản phẩm mới nhất
+            var products = await _productService.GetLatestProducts(languageId, take);
+            if (products == null)
+            {
+                return BadRequest();
+            }
+            return Ok(products);
+        }
+
+        #endregion Web App
+
+        //---------------------------------------------------------------------------------//
+
+        #region Both Admin & Web App
+
+        [HttpGet("{productId}/{languageId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProductById(int productId, string languageId)
+        {
+            var product = await _productService.GetProductById(productId, languageId);
+            if (product == null)
+            {
+                return BadRequest();
+            }
+            return Ok(product);
+        }
+
+        [HttpGet("paging")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllProductPaging([FromQuery] GetProductPagingRequest request)
+        {
+            var products = await _productService.GetAllProductPaging(request);
+            if (products == null)
+            {
+                return BadRequest();
+            }
+            return Ok(products);
+        }
+
+        [HttpGet("{productId}/images/{imageId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProductImageById(int productId, int imageId)
+        {
+            //Lấy ảnh theo imageId
+            var image = await _productService.GetProductImageById(imageId);
+            if (image == null)
+            {
+                return BadRequest();
+            }
+            return Ok(image);
+        }
+
+        #endregion Both Admin & Web App
     }
 }

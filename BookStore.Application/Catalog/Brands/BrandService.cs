@@ -25,7 +25,7 @@ namespace BookStore.Application.Catalog.Brands
 
         #region Admin App
 
-        public async Task<int> Create(BrandCreateRequest request)
+        public async Task<int> CreateBrand(BrandCreateRequest request)
         {
             //Lấy danh sách ngôn ngữ
             var languages = _context.Languages;
@@ -72,7 +72,7 @@ namespace BookStore.Application.Catalog.Brands
             return brand.BrandId;
         }
 
-        public async Task<int> Update(BrandUpdateRequest request)
+        public async Task<int> UpdateBrand(BrandUpdateRequest request)
         {
             //Lấy thông tin brand,brandTranslation theo id từ request,
             var brand = await _context.Brands.FindAsync(request.BrandId);
@@ -96,7 +96,7 @@ namespace BookStore.Application.Catalog.Brands
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> Delete(int brandId)
+        public async Task<int> DeleteBrand(int brandId)
         {
             //Lấy thông tin brand,brandTranslation theo id từ request,
             var brand = await _context.Brands.FindAsync(brandId);
@@ -126,7 +126,7 @@ namespace BookStore.Application.Catalog.Brands
 
         #region Both Admin & Web App
 
-        public async Task<List<BrandVm>> GetAll(string languageId)
+        public async Task<List<BrandVm>> GetAllBrand(string languageId)
         {
             //1.Select join
             var query = from c in _context.Brands
@@ -141,7 +141,7 @@ namespace BookStore.Application.Catalog.Brands
             }).ToListAsync();
         }
 
-        public async Task<BrandVm> GetById(string languageId, int brandId)
+        public async Task<BrandVm> GetBrandById(string languageId, int brandId)
         {
             var query = from c in _context.Brands
                         join ct in _context.BrandTranslations on c.BrandId equals ct.BrandId

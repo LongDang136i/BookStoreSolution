@@ -17,7 +17,7 @@ namespace BookStore.BackEndApi.Controllers
             _languageService = languageService;
         }
 
-        [HttpGet()]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await _languageService.GetAll();

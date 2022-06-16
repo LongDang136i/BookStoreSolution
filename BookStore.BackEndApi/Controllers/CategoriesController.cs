@@ -1,4 +1,5 @@
 ﻿using BookStore.Application.Catalog.Categories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -17,16 +18,18 @@ namespace BookStore.BackEndApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string languageId)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllCategory(string languageId)
         {
-            var categories = await _categoryService.GetAll(languageId);
+            var categories = await _categoryService.GetAllCategory(languageId);
             return Ok(categories);
         }
 
         [HttpGet("{id}/{languageId}")]
-        public async Task<IActionResult> GetById(string languageId, int id)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCategoryById(string languageId, int id)
         {
-            var category = await _categoryService.GetById(languageId, id);
+            var category = await _categoryService.GetCategoryById(languageId, id);
             return Ok(category);
         }
     }
