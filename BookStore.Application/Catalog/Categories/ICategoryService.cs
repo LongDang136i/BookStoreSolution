@@ -12,11 +12,11 @@ namespace BookStore.Application.Catalog.Categories
 
         #region Admin App
 
-        Task<int> Create(CategoryCreateRequest request);
+        Task<int> CreateCategory(CategoryCreateRequest request);
 
-        Task<int> Update(CategoryUpdateRequest request);
+        Task<int> UpdateCategory(CategoryUpdateRequest request);
 
-        Task<int> Delete(int categoryId);
+        Task<int> DeleteCategory(int categoryId);
 
         #endregion Admin App
 
@@ -32,9 +32,9 @@ namespace BookStore.Application.Catalog.Categories
 
         #region Both Admin & Web App
 
-        Task<List<CategoryVm>> GetAll(string languageId);
+        Task<List<CategoryVm>> GetAllCategory(string languageId);
 
-        Task<CategoryVm> GetById(string languageId, int categoryId);
+        Task<CategoryVm> GetCategoryById(string languageId, int categoryId);
 
         #endregion Both Admin & Web App
     }

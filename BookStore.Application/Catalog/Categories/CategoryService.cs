@@ -25,7 +25,7 @@ namespace BookStore.Application.Catalog.Categories
 
         #region Admin App
 
-        public async Task<int> Create(CategoryCreateRequest request)
+        public async Task<int> CreateCategory(CategoryCreateRequest request)
         {
             //Lấy danh sách ngôn ngữ
             var languages = _context.Languages;
@@ -73,7 +73,7 @@ namespace BookStore.Application.Catalog.Categories
             return category.CategoryId;
         }
 
-        public async Task<int> Update(CategoryUpdateRequest request)
+        public async Task<int> UpdateCategory(CategoryUpdateRequest request)
         {
             //Lấy thông tin category,categoryTranslation theo id từ request,
             var category = await _context.Categories.FindAsync(request.CategoryId);
@@ -98,7 +98,7 @@ namespace BookStore.Application.Catalog.Categories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> Delete(int categoryId)
+        public async Task<int> DeleteCategory(int categoryId)
         {
             //Lấy thông tin category,categoryTranslation theo id từ request,
             var category = await _context.Categories.FindAsync(categoryId);
@@ -118,17 +118,9 @@ namespace BookStore.Application.Catalog.Categories
 
         //---------------------------------------------------------------------------------//
 
-        #region Web App
-
-        //
-
-        #endregion Web App
-
-        //---------------------------------------------------------------------------------//
-
         #region Both Admin & Web App
 
-        public async Task<List<CategoryVm>> GetAll(string languageId)
+        public async Task<List<CategoryVm>> GetAllCategory(string languageId)
         {
             //1. Select join
             var query = from c in _context.Categories
@@ -143,7 +135,7 @@ namespace BookStore.Application.Catalog.Categories
             }).ToListAsync();
         }
 
-        public async Task<CategoryVm> GetById(string languageId, int categoryId)
+        public async Task<CategoryVm> GetCategoryById(string languageId, int categoryId)
         {
             var query = from c in _context.Categories
                         join ct in _context.CategoryTranslations on c.CategoryId equals ct.CategoryId
