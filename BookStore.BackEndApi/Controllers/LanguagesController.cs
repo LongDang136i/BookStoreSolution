@@ -17,11 +17,11 @@ namespace BookStore.BackEndApi.Controllers
             _languageService = languageService;
         }
 
-        [HttpGet]
+        [HttpGet()]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _languageService.GetAll();
-            return Ok(result);
+            var languages = await _languageService.GetAll();
+            return Ok(languages);
         }
     }
 }

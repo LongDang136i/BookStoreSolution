@@ -1,5 +1,7 @@
 ﻿using BookStore.AdminApp.Models;
+using BookStore.Utilities.Constants;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -18,6 +20,15 @@ namespace BookStore.AdminApp.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+        }
+
+        [HttpPost]
+        public IActionResult Language(NavigationViewModel viewModel)
+        {
+            HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId,
+                viewModel.CurrentLanguageId);
+
+            return Redirect(viewModel.ReturnUrl);
         }
 
         public IActionResult Index()

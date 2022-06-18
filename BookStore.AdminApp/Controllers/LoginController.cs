@@ -60,8 +60,7 @@ namespace BookStore.AdminApp.Controllers
             };
 
             //Thiết lập ngôn ngữ mặc định
-            HttpContext.Session.SetString(SystemConstants.AppSettings
-                .DefaultLanguageId, _configuration[SystemConstants.AppSettings.DefaultLanguageId]);
+            HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration[SystemConstants.AppSettings.DefaultLanguageId]);
 
             //Gán Token
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
