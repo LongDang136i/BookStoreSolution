@@ -14,7 +14,8 @@ namespace BookStore.ApiIntegration
         public CategoryApiClient(IHttpClientFactory httpClientFactory,
                    IHttpContextAccessor httpContextAccessor,
                     IConfiguration configuration)
-            : base(httpClientFactory, httpContextAccessor, configuration) { }
+            : base(httpClientFactory, httpContextAccessor, configuration)
+        { }
 
         public async Task<List<CategoryVm>> GetAll(string languageId)
         {

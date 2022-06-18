@@ -23,10 +23,19 @@ namespace BookStore.BackEndApi.Controllers
 
         #region Admin App
 
+        //http://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
+        [HttpGet("paging")]
+        [Authorize]
+        public async Task<IActionResult> GetUsersPaging([FromQuery] GetUserPagingRequest request)
+        {
+            var users = await _userService.GetUsersPaging(request);
+            return Ok(users);
+        }
+
         //PUT: http://localhost/api/users/id
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserUpdateRequest request)
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] EditUserRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -62,15 +71,6 @@ namespace BookStore.BackEndApi.Controllers
             return Ok(result);
         }
 
-        //http://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
-        [HttpGet("paging")]
-        [Authorize]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
-        {
-            var products = await _userService.GetUserPaging(request);
-            return Ok(products);
-        }
-
         #endregion Admin App
 
         //---------------------------------------------------------------------------------//
@@ -79,7 +79,7 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromForm] LoginRequest request)
+        public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -95,7 +95,7 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

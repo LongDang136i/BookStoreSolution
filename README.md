@@ -32,7 +32,13 @@
 -- Microsoft.AspNetCore.Authentication.JwtBearer
 -- FluentValidation.AspNetCore
 
-
+- BookStore.AdminApp
+-- Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
+-- Microsoft.IdentityModel.Logging
+-- Microsoft.IdentityModel.Tokens
+-- System.IdentityModel.Tokens.Jwt
+-- FluentValidation.AspNetCore
+-- Microsoft.AspNetCore.Session
 
 
 ########################################################################
@@ -53,9 +59,32 @@
 
 
 
+########################################################################
+## Process
+- Login
+-- Admin & Web App send create request from user input(M-View-Controller: LoginController,...)
+-- Process in ApiIntegration and return (UserApiClient)
+-- Process in Application (UserService)
+-- Process in BackEndApi (UsersController)
 
 
 
+
+
+
+########################################################################
+## Tokens, Keywords in appsettings,lauchSettings
+
+"ConnectionStrings": {
+    "BookStoreSolutionDb": "Server=.;Database=BookStoreSolution;Trusted_Connection=True;"
+  }
+
+  "DefaultLanguageId": "en",
+
+  "Tokens": {
+    "Key": "0123456789ABCDEF",
+    "Issuer": "https://bookstore.com"
+  }
 
 
 
@@ -88,17 +117,16 @@
 #endregion
 
 //---------------------------------------------------------------------------------//
-#region Web App
-
-
-#endregion
-
-//---------------------------------------------------------------------------------//
 #region Both Admin & Web App
 
 
 #endregion
 
+//---------------------------------------------------------------------------------//
+#region Web App
+
+
+#endregion
 
 
 #HTTP Request

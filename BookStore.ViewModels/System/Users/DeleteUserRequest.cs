@@ -4,8 +4,8 @@ using System.Text;
 
 namespace BookStore.ViewModels.System.Users
 {
-    public class UserDeleteRequest
+    public class DeleteUserRequest
     {
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
     }
 }

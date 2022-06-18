@@ -13,13 +13,13 @@ namespace BookStore.Application.System.Users
 
         #region Admin App
 
-        Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request);
+        Task<ApiResult<bool>> UpdateUser(Guid id, EditUserRequest request);
 
         Task<ApiResult<bool>> DeleteUser(Guid id);
 
         Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
 
-        Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(GetUserPagingRequest request);
+        Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUserPagingRequest request);
 
         #endregion Admin App
 

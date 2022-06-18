@@ -36,7 +36,7 @@ namespace BookStore.Application.System.Users
 
         #region Admin App
 
-        public async Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateUser(Guid id, EditUserRequest request)
         {
             //Ktra nếu email nhập vào đã tồn tại ở người dùng khác
             if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
@@ -61,7 +61,7 @@ namespace BookStore.Application.System.Users
             return new ApiErrorResult<bool>("Can not update user");
         }
 
-        public async Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUserPagingRequest request)
         {
             //Lấy ra user theo từ khóa được nhập
             var query = _userManager.Users;
@@ -91,6 +91,7 @@ namespace BookStore.Application.System.Users
                     FirstName = x.FisrtName,
                     LastName = x.LastName,
                     UserId = x.Id,
+                    Dob = x.Dob,
                 }).ToListAsync();
 
             //Tạo thông tin cho trang kết quả
@@ -155,14 +156,6 @@ namespace BookStore.Application.System.Users
         }
 
         #endregion Admin App
-
-        //---------------------------------------------------------------------------------//
-
-        #region Web App
-
-        //
-
-        #endregion Web App
 
         //---------------------------------------------------------------------------------//
 

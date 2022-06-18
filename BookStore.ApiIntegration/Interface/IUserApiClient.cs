@@ -7,18 +7,30 @@ namespace BookStore.ApiIntegration.Interface
 {
     public interface IUserApiClient
     {
+        //---------------------------------------------------------------------------------//
+
+        #region Admin App
+
+        Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUserPagingRequest request);
+
+        Task<ApiResult<bool>> EditUser(Guid userId, EditUserRequest request);
+
+        Task<ApiResult<bool>> DeleteUser(Guid userId);
+
+        Task<ApiResult<bool>> RoleAssign(Guid userId, RoleAssignRequest request);
+
+        #endregion Admin App
+
+        //---------------------------------------------------------------------------------//
+
+        #region Both Admin & Web App
+
         Task<ApiResult<string>> Authenticate(LoginRequest request);
 
-        Task<ApiResult<PagedResult<UserVm>>> GetUsersPagings(GetUserPagingRequest request);
-
-        Task<ApiResult<bool>> RegisterUser(RegisterRequest registerRequest);
-
-        Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request);
+        Task<ApiResult<bool>> RegisterUser(RegisterRequest request);
 
         Task<ApiResult<UserVm>> GetById(Guid id);
 
-        Task<ApiResult<bool>> Delete(Guid id);
-
-        Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
+        #endregion Both Admin & Web App
     }
 }

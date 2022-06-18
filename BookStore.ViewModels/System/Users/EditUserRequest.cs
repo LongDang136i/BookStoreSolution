@@ -5,9 +5,9 @@ using System.Text;
 
 namespace BookStore.ViewModels.System.Users
 {
-    public class UserUpdateRequest
+    public class EditUserRequest
     {
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
 
         public string FirstName { get; set; }
 
