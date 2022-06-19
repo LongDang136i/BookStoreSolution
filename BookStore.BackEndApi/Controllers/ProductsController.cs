@@ -82,7 +82,7 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpPost("{productId}/images")]
         [Authorize]
-        public async Task<IActionResult> CreateProductImage(int productId, [FromForm] ProductImageCreateRequest request)
+        public async Task<IActionResult> CreateProductImage(int productId, [FromForm] CreateProductImageRequest request)
         {
             //Ktra dữ liệu vào
             if (!ModelState.IsValid)
@@ -91,7 +91,7 @@ namespace BookStore.BackEndApi.Controllers
             }
 
             //Thực hiện thêm ảnh và ktra kq
-            var imageId = await _productService.AddProductImage(productId, request);
+            var imageId = await _productService.CreateProductImage(productId, request);
             if (imageId == 0)
             {
                 return BadRequest();
@@ -105,7 +105,7 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpPut("{productId}/images/{imageId}")]
         [Authorize]
-        public async Task<IActionResult> UpdateProductImage(int imageId, [FromForm] ProductImageUpdateRequest request)
+        public async Task<IActionResult> UpdateProductImage(int imageId, [FromForm] UpdateProductImageRequest request)
         {
             //Ktra dữ liệu vào
             if (!ModelState.IsValid)
@@ -208,9 +208,9 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpGet("paging")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllProductPaging([FromQuery] GetProductPagingRequest request)
+        public async Task<IActionResult> GetAllProductPaging([FromQuery] GetProductsPagingRequest request)
         {
-            var products = await _productService.GetAllProductPaging(request);
+            var products = await _productService.GetProductsPaging(request);
             if (products == null)
             {
                 return BadRequest();

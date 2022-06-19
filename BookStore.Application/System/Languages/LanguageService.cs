@@ -31,7 +31,7 @@ namespace BookStore.Application.System.Languages
             _context = context;
         }
 
-        public async Task<ApiResult<List<LanguageVm>>> GetAll()
+        public async Task<ApiResult<List<LanguageVm>>> GetAllLanguages()
         {
             //Lấy ra danh sách tất cả language tồn tại
             var languages = await _context.Languages.Select(x => new LanguageVm()

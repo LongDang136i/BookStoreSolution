@@ -185,7 +185,7 @@ namespace BookStore.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> AddProductImage(int productId, ProductImageCreateRequest request)
+        public async Task<int> CreateProductImage(int productId, CreateProductImageRequest request)
         {
             //Tạo mới productImage gán thông tin từ request
             var productImage = new ProductImage()
@@ -220,7 +220,7 @@ namespace BookStore.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateProductImage(int imageId, ProductImageUpdateRequest request)
+        public async Task<int> UpdateProductImage(int imageId, UpdateProductImageRequest request)
         {
             //Lấy ảnh ra theo imageId và kiểm tra null
             var productImage = await _context.ProductImages.FindAsync(imageId);
@@ -396,7 +396,7 @@ namespace BookStore.Application.Catalog.Products
             return productViewModel;
         }
 
-        public async Task<PagedResult<ProductVm>> GetAllProductPaging(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductVm>> GetProductsPaging(GetProductsPagingRequest request)
         {
             //1. Tạo truy vấn Join:
             /*Từ p ở bảng Products
@@ -465,7 +465,7 @@ namespace BookStore.Application.Catalog.Products
             return pagedResult;
         }
 
-        public async Task<PagedResult<ProductVm>> GetProductByCategoryId(string languageId, GetProductPagingRequest request)
+        public async Task<PagedResult<ProductVm>> GetProductByCategoryId(string languageId, GetProductsPagingRequest request)
         {
             //1. Lấy ra các Products kèm ProductTranslations theo CategoryId
             var query = from p in _context.Products

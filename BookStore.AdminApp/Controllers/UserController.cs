@@ -21,29 +21,43 @@ namespace BookStore.AdminApp.Controllers
             _configuration = configuration;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 1)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
+            //Lấy Token Authorize
             var sessions = HttpContext.Session.GetString("Token");
-            var request = new GetUserPagingRequest()
+
+            //Tạo request lấy ds người dùng
+            var request = new GetUsersPagingRequest()
             {
                 BearerToken = sessions,
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };
+
+            //Gửi request lấy ds người dùng
             var data = await _userApiClient.GetUsersPaging(request);
+
+            //tạo ViewBag lưu từ khóa cho ô tìm kiếm
             ViewBag.Keyword = keyword;
+
+            //Thông báo kết quả bằng TempData
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
+
+            //Trả về kết quả
             return View(data.ResultObj);
         }
 
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
+            //Đăng xuất xóa thông tin Cookie
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            //Xóa token xác minh thông tin đăng nhập
             HttpContext.Session.Remove("Token");
             return RedirectToAction("Index", "Login");
         }
@@ -51,22 +65,25 @@ namespace BookStore.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> UserDetails(Guid id)
         {
-            var result = await _userApiClient.GetById(id);
+            //Gửi request lấy thông tin người dùng theo id
+            var result = await _userApiClient.GetUserById(id);
             return View(result.ResultObj);
         }
 
         [HttpGet]
-        public IActionResult CreateUser()
+        public IActionResult RegisterUser()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(RegisterRequest request)
+        public async Task<IActionResult> RegisterUser(RegisterRequest request)
         {
+            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
                 return View();
 
+            //gửi request đăng kí người dùng
             var result = await _userApiClient.RegisterUser(request);
             if (result.IsSuccessed)
             {
@@ -80,7 +97,7 @@ namespace BookStore.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> EditUser(Guid id)
         {
-            var result = await _userApiClient.GetById(id);
+            var result = await _userApiClient.GetUserById(id);
             if (result.IsSuccessed)
             {
                 var user = result.ResultObj;

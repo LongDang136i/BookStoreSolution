@@ -7,6 +7,6 @@ namespace BookStore.ApiIntegration.Interface
 {
     public interface IRoleApiClient
     {
-        Task<ApiResult<List<RoleVm>>> GetAll();
+        Task<ApiResult<List<RoleVm>>> GetAllRoles();
     }
 }

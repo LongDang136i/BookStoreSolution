@@ -7,8 +7,8 @@ namespace BookStore.ApiIntegration.Interface
 {
     public interface ICategoryApiClient
     {
-        Task<List<CategoryVm>> GetAll(string languageId);
+        Task<List<CategoryVm>> GetAllCategories(string languageId);
 
-        Task<CategoryVm> GetById(string languageId, int categoryId);
+        Task<CategoryVm> GetCategoryById(string languageId, int categoryId);
     }
 }

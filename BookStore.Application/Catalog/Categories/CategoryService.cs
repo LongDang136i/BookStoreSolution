@@ -25,7 +25,7 @@ namespace BookStore.Application.Catalog.Categories
 
         #region Admin App
 
-        public async Task<int> CreateCategory(CategoryCreateRequest request)
+        public async Task<int> CreateCategory(CreateCategoryRequest request)
         {
             //Lấy danh sách ngôn ngữ
             var languages = _context.Languages;
@@ -73,7 +73,7 @@ namespace BookStore.Application.Catalog.Categories
             return category.CategoryId;
         }
 
-        public async Task<int> UpdateCategory(CategoryUpdateRequest request)
+        public async Task<int> UpdateCategory(UpdateCategoryRequest request)
         {
             //Lấy thông tin category,categoryTranslation theo id từ request,
             var category = await _context.Categories.FindAsync(request.CategoryId);
@@ -120,7 +120,7 @@ namespace BookStore.Application.Catalog.Categories
 
         #region Both Admin & Web App
 
-        public async Task<List<CategoryVm>> GetAllCategory(string languageId)
+        public async Task<List<CategoryVm>> GetAllCategories(string languageId)
         {
             //1. Select join
             var query = from c in _context.Categories

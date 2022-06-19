@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BookStore.ViewModels.Catalog.ProductImages
 {
-    public class ProductImageDeleteRequest
+    public class DeleteProductImageRequest
     {
         public int ProductImgId { get; set; }
     }

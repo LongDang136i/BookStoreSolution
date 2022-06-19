@@ -115,7 +115,7 @@ namespace BookStore.ApiIntegration
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<PagedResult<ProductVm>> GetPagings(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductVm>> GetProductsPaging(GetProductsPagingRequest request)
         {
             var data = await GetAsync<PagedResult<ProductVm>>(
                 $"/api/products/paging?pageIndex={request.PageIndex}" +
@@ -144,7 +144,7 @@ namespace BookStore.ApiIntegration
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
-        public async Task<ProductVm> GetById(int productId, string languageId)
+        public async Task<ProductVm> GetProductById(int productId, string languageId)
         {
             var data = await GetAsync<ProductVm>($"/api/products/{productId}/{languageId}");
 

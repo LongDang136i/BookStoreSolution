@@ -5,9 +5,9 @@ using System.Text;
 
 namespace BookStore.ViewModels.System.Users.Validators
 {
-    public class UserUpdateRequestValidator : AbstractValidator<RegisterRequest>
+    public class EditUserRequestValidator : AbstractValidator<EditUserRequest>
     {
-        public UserUpdateRequestValidator()
+        public EditUserRequestValidator()
         {
             RuleFor(x => x.FirstName).NotEmpty().WithMessage("FirstName is required")
                     .MaximumLength(200).WithMessage("FirstName cannot over 200 character");

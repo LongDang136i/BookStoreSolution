@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BookStore.ViewModels.Catalog.Brands
 {
-    public class BrandDeleteRequest
+    public class DeleteBrandRequest
     {
         public int BrandId { get; set; }
     }

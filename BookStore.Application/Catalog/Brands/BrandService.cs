@@ -25,7 +25,7 @@ namespace BookStore.Application.Catalog.Brands
 
         #region Admin App
 
-        public async Task<int> CreateBrand(BrandCreateRequest request)
+        public async Task<int> CreateBrand(CreateBrandRequest request)
         {
             //Lấy danh sách ngôn ngữ
             var languages = _context.Languages;
@@ -72,7 +72,7 @@ namespace BookStore.Application.Catalog.Brands
             return brand.BrandId;
         }
 
-        public async Task<int> UpdateBrand(BrandUpdateRequest request)
+        public async Task<int> UpdateBrand(UpdateBrandRequest request)
         {
             //Lấy thông tin brand,brandTranslation theo id từ request,
             var brand = await _context.Brands.FindAsync(request.BrandId);
@@ -126,7 +126,7 @@ namespace BookStore.Application.Catalog.Brands
 
         #region Both Admin & Web App
 
-        public async Task<List<BrandVm>> GetAllBrand(string languageId)
+        public async Task<List<BrandVm>> GetAllBrands(string languageId)
         {
             //1.Select join
             var query = from c in _context.Brands

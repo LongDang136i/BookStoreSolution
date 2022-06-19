@@ -19,11 +19,11 @@ namespace BookStore.Application.Catalog.Products
 
         Task<int> DeleteProduct(int productId);
 
-        Task<int> AddProductImage(int productId, ProductImageCreateRequest request);
+        Task<int> CreateProductImage(int productId, CreateProductImageRequest request);
 
         Task<int> RemoveProductImage(int imageId);
 
-        Task<int> UpdateProductImage(int imageId, ProductImageUpdateRequest request);
+        Task<int> UpdateProductImage(int imageId, UpdateProductImageRequest request);
 
         Task<ApiResult<bool>> CategoryAssign(int productId, CategoryAssignRequest request);
 
@@ -45,9 +45,9 @@ namespace BookStore.Application.Catalog.Products
 
         Task<ProductVm> GetProductById(int productId, string languageId);
 
-        Task<PagedResult<ProductVm>> GetAllProductPaging(GetProductPagingRequest request);
+        Task<PagedResult<ProductVm>> GetProductsPaging(GetProductsPagingRequest request);
 
-        Task<PagedResult<ProductVm>> GetProductByCategoryId(string languageId, GetProductPagingRequest request);
+        Task<PagedResult<ProductVm>> GetProductByCategoryId(string languageId, GetProductsPagingRequest request);
 
         Task<ProductImageVm> GetProductImageById(int imageId);
 

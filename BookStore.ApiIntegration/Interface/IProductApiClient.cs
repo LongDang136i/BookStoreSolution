@@ -7,7 +7,7 @@ namespace BookStore.ApiIntegration.Interface
 {
     public interface IProductApiClient
     {
-        Task<PagedResult<ProductVm>> GetPagings(GetProductPagingRequest request);
+        Task<PagedResult<ProductVm>> GetProductsPaging(GetProductsPagingRequest request);
 
         Task<bool> CreateProduct(ProductCreateRequest request);
 
@@ -17,7 +17,7 @@ namespace BookStore.ApiIntegration.Interface
 
         Task<ApiResult<bool>> CategoryAssign(int productId, CategoryAssignRequest request);
 
-        Task<ProductVm> GetById(int productId, string languageId);
+        Task<ProductVm> GetProductById(int productId, string languageId);
 
         Task<List<ProductVm>> GetFeaturedProducts(string languageId, int take);
 

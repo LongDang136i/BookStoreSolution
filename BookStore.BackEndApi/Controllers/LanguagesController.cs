@@ -18,9 +18,9 @@ namespace BookStore.BackEndApi.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllLanguages()
         {
-            var languages = await _languageService.GetAll();
+            var languages = await _languageService.GetAllLanguages();
             return Ok(languages);
         }
     }

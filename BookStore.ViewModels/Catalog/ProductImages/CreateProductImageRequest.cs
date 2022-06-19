@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BookStore.ViewModels.Catalog.ProductImages
 {
-    public class ProductImageCreateRequest
+    public class CreateProductImageRequest
     {
         public string Caption { get; set; }
         public bool IsDefault { get; set; }

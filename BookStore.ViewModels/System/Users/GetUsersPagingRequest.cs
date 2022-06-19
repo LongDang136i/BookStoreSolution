@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BookStore.ViewModels.System.Users
 {
-    public class GetUserPagingRequest : PagingRequestBase
+    public class GetUsersPagingRequest : PagingRequestBase
     {
         public string Keyword { get; set; }
     }

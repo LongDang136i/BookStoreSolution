@@ -13,7 +13,9 @@ namespace BookStore.ApiIntegration
 {
     public class BaseApiClient
     {
+        //Tạo các biến môi trường
         private readonly IHttpClientFactory _httpClientFactory;
+
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -28,21 +30,31 @@ namespace BookStore.ApiIntegration
 
         protected async Task<TResponse> PostAsync<TResponse>(string url, StringContent content)
         {
+            //Tạo session và lấy token xác minh
             var sessions = _httpContextAccessor
                 .HttpContext
                 .Session
                 .GetString(SystemConstants.AppSettings.Token);
 
+            //Tạo obj client
             var client = _httpClientFactory.CreateClient();
 
+            //Gán địa chỉ cho client
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
 
+            //kiểm tra thông tin session
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
+            //tạo response lấy dữ liệu bằng cách gọi đến BackEndApi (UsersController)
             var response = await client.PostAsync(url, content);
+
+            //Tạo kết quả lấy giá trị bằng cách đọc response
             var result = await response.Content.ReadAsStringAsync();
+
+            //Kiểm tra kết quả và trả về
             if (response.IsSuccessStatusCode)
             {
+                //Ép kiểu kết quả với kiểu dữ liệu tương ứng với phương thức gọi đến
                 TResponse myDeserializedObjList = (TResponse)JsonConvert.DeserializeObject(result,
                     typeof(TResponse));
 

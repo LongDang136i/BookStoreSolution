@@ -21,7 +21,7 @@ namespace BookStore.AdminApp.Controllers.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var languages = await _languageApiClient.GetAll();
+            var languages = await _languageApiClient.GetAllLanguages();
             var currentLanguageId = HttpContext
                 .Session
                 .GetString(SystemConstants.AppSettings.DefaultLanguageId);

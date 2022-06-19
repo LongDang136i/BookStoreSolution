@@ -4,8 +4,7 @@ using System.Text;
 
 namespace BookStore.ViewModels.Catalog.Categories
 {
-    public class CategoryDeleteRequest
+    public class GetCategoriesPaging
     {
-        public int CategoryId { get; set; }
     }
 }

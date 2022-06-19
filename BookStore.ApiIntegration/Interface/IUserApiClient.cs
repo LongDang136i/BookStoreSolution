@@ -11,7 +11,7 @@ namespace BookStore.ApiIntegration.Interface
 
         #region Admin App
 
-        Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUserPagingRequest request);
+        Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUsersPagingRequest request);
 
         Task<ApiResult<bool>> EditUser(Guid userId, EditUserRequest request);
 
@@ -29,7 +29,7 @@ namespace BookStore.ApiIntegration.Interface
 
         Task<ApiResult<bool>> RegisterUser(RegisterRequest request);
 
-        Task<ApiResult<UserVm>> GetById(Guid id);
+        Task<ApiResult<UserVm>> GetUserById(Guid id);
 
         #endregion Both Admin & Web App
     }

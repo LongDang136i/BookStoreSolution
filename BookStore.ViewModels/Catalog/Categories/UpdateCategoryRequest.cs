@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BookStore.ViewModels.Catalog.Categories
 {
-    public class CategoryUpdateRequest
+    public class UpdateCategoryRequest
     {
         public int CategoryId { get; set; }
         public int SortOrder { set; get; }

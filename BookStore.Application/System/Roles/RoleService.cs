@@ -19,7 +19,7 @@ namespace BookStore.Application.System.Roles
             _roleManager = roleManager;
         }
 
-        public async Task<List<RoleVm>> GetAll()
+        public async Task<List<RoleVm>> GetAllRoles()
         {
             //Lấy ra danh sách tất cả role tồn tại
             var roles = await _roleManager.Roles.Select(x => new RoleVm()

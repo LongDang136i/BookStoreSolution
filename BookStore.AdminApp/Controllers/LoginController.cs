@@ -74,6 +74,7 @@ namespace BookStore.AdminApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        //Phương thức xác minh token
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;

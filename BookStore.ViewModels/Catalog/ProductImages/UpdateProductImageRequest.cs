@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BookStore.ViewModels.Catalog.ProductImages
 {
-    public class ProductImageUpdateRequest
+    public class UpdateProductImageRequest
     {
         public int ProductId { get; set; }
         public string Caption { get; set; }

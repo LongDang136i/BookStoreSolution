@@ -19,9 +19,9 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllCategory(string languageId)
+        public async Task<IActionResult> GetAllCategories(string languageId)
         {
-            var categories = await _categoryService.GetAllCategory(languageId);
+            var categories = await _categoryService.GetAllCategories(languageId);
             return Ok(categories);
         }
 
