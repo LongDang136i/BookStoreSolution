@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BookStore.ViewModels.Catalog.Brands
+namespace BookStore.ViewModels.Catalog.Categories
 {
-    public class UpdateBrandRequest
+    public class EditCategoryRequest
     {
-        public int BrandId { get; set; }
+        public int CategoryId { get; set; }
         public int SortOrder { set; get; }
         public bool IsShowOnHome { set; get; }
         public int? ParentId { set; get; }

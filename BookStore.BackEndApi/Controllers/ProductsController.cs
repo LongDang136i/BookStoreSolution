@@ -208,7 +208,7 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpGet("paging")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllProductPaging([FromQuery] GetProductsPagingRequest request)
+        public async Task<IActionResult> GetProductsPaging([FromQuery] GetProductsPagingRequest request)
         {
             var products = await _productService.GetProductsPaging(request);
             if (products == null)

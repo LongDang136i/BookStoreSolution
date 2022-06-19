@@ -36,31 +36,6 @@ namespace BookStore.Application.System.Users
 
         #region Admin App
 
-        public async Task<ApiResult<bool>> EditUser(Guid id, EditUserRequest request)
-        {
-            //Ktra nếu email nhập vào đã tồn tại ở người dùng khác
-            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
-            {
-                return new ApiErrorResult<bool>("Email has been register by another user");
-            }
-
-            //Thõa điều kiện thì lấy ra user theo id, gán thông tin mới
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            user.Dob = request.Dob;
-            user.Email = request.Email;
-            user.FisrtName = request.FirstName;
-            user.LastName = request.LastName;
-            user.PhoneNumber = request.PhoneNumber;
-
-            //thực thi và kiểm tra kq trả về
-            var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
-            {
-                return new ApiSuccessResult<bool>();
-            }
-            return new ApiErrorResult<bool>("Can not update user");
-        }
-
         public async Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUsersPagingRequest request)
         {
             //Lấy ra user theo từ khóa được nhập
@@ -103,6 +78,31 @@ namespace BookStore.Application.System.Users
                 Items = data,
             };
             return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
+        }
+
+        public async Task<ApiResult<bool>> EditUser(Guid id, EditUserRequest request)
+        {
+            //Ktra nếu email nhập vào đã tồn tại ở người dùng khác
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
+            {
+                return new ApiErrorResult<bool>("Email has been register by another user");
+            }
+
+            //Thõa điều kiện thì lấy ra user theo id, gán thông tin mới
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            user.Dob = request.Dob;
+            user.Email = request.Email;
+            user.FisrtName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumber;
+
+            //thực thi và kiểm tra kq trả về
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Can not update user");
         }
 
         public async Task<ApiResult<bool>> DeleteUser(Guid id)

@@ -9,12 +9,15 @@ using Microsoft.EntityFrameworkCore;
 using BookStore.Data.Entities;
 using BookStore.Utilities.Constants;
 using BookStore.Utilities.Exceptions;
+using BookStore.ViewModels.Common;
+using Microsoft.Extensions.Configuration;
 
 namespace BookStore.Application.Catalog.Categories
 {
     public class CategoryService : ICategoryService
     {
         private readonly bsDbContext _context;
+        //private readonly IConfiguration _config;
 
         public CategoryService(bsDbContext context)
         {
@@ -25,7 +28,53 @@ namespace BookStore.Application.Catalog.Categories
 
         #region Admin App
 
-        public async Task<int> CreateCategory(CreateCategoryRequest request)
+        public async Task<ApiResult<PagedResult<CategoryVm>>> GetCategoriesPaging(GetCategoriesPagingRequest request)
+        {
+            //Tạo query
+            var query = from c in _context.Categories
+                        join ct in _context.CategoryTranslations on c.CategoryId equals ct.CategoryId
+                        //default
+                        where ct.LanguageId == request.LanguageId
+                        select new { c, ct };
+
+            //2. Lọc dữ liệu
+            //Nếu từ khóa khác rỗng, chỉ lấy ra những CategoryTranslations có từ khóa trong tên
+            if (!string.IsNullOrEmpty(request.Keyword))
+                query = query.Where(x => x.ct.Name.Contains(request.Keyword));
+
+            //3. Phân trang
+            //Lấy ra tổng số bản ghi
+            int totalRow = await query.CountAsync();
+
+            //Tạo data cho từng trang, lấy ra danh sách bản ghi nhất định
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new CategoryVm()
+                {
+                    CategoryId = x.c.CategoryId,
+                    SortOrder = x.c.SortOrder,
+                    IsShowOnHome = x.c.IsShowOnHome,
+                    ParentId = x.c.ParentId,
+                    Status = x.c.Status,
+                    Name = x.ct.Name,
+                    SeoDescription = x.ct.SeoDescription,
+                    SeoTitle = x.ct.SeoTitle,
+                    LanguageId = x.ct.LanguageId,
+                    SeoAlias = x.ct.SeoAlias,
+                }).ToListAsync();
+
+            //4. Tạo trang kết quả
+            var pagedResult = new PagedResult<CategoryVm>()
+            {
+                TotalRecords = totalRow,
+                PageSize = request.PageSize,
+                PageIndex = request.PageIndex,
+                Items = data
+            };
+            return new ApiSuccessResult<PagedResult<CategoryVm>>(pagedResult);
+        }
+
+        public async Task<ApiResult<bool>> CreateCategory(CreateCategoryRequest request)
         {
             //Lấy danh sách ngôn ngữ
             var languages = _context.Languages;
@@ -69,11 +118,15 @@ namespace BookStore.Application.Catalog.Categories
 
             //Thêm danh mục vào csdl
             _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-            return category.CategoryId;
+            var data = await _context.SaveChangesAsync();
+            if (data > 0)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Can not create category");
         }
 
-        public async Task<int> UpdateCategory(UpdateCategoryRequest request)
+        public async Task<ApiResult<bool>> EditCategory(EditCategoryRequest request)
         {
             //Lấy thông tin category,categoryTranslation theo id từ request,
             var category = await _context.Categories.FindAsync(request.CategoryId);
@@ -95,23 +148,35 @@ namespace BookStore.Application.Catalog.Categories
             categoryTranslation.SeoTitle = request.SeoTitle;
 
             //Thực thi
-            return await _context.SaveChangesAsync();
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Can not edit category");
         }
 
-        public async Task<int> DeleteCategory(int categoryId)
+        public async Task<ApiResult<bool>> DeleteCategory(int categoryId)
         {
             //Lấy thông tin category,categoryTranslation theo id từ request,
             var category = await _context.Categories.FindAsync(categoryId);
-            var categoryTranslation = await _context.CategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == categoryId);
+
+            var categoryTranslation = _context.CategoryTranslations.Where(x => x.CategoryId == categoryId);
 
             //Ktra: nếu kết quả null thì báo lỗi
             if (category == null || categoryTranslation == null) throw new BookStoreException($"Cannot find a category: {categoryId}");
 
             //Xóa cả category trong bảng Categories, và categoryTranslation trong bảng CategoryTranslations
             _context.Categories.Remove(category);
-            _context.CategoryTranslations.Remove(categoryTranslation);
+            foreach (var item in categoryTranslation)
+            {
+                _context.CategoryTranslations.Remove(item);
+            }
 
-            return await _context.SaveChangesAsync();
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Can not delete category");
         }
 
         #endregion Admin App
@@ -145,7 +210,14 @@ namespace BookStore.Application.Catalog.Categories
             {
                 CategoryId = x.c.CategoryId,
                 Name = x.ct.Name,
-                ParentId = x.c.ParentId
+                ParentId = x.c.ParentId,
+                SeoAlias = x.ct.SeoAlias,
+                SeoDescription = x.ct.SeoDescription,
+                SeoTitle = x.ct.SeoTitle,
+                SortOrder = x.c.SortOrder,
+                Status = x.c.Status,
+                IsShowOnHome = x.c.IsShowOnHome,
+                LanguageId = languageId
             }).FirstOrDefaultAsync();
         }
 

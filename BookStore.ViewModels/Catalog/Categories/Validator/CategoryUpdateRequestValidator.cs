@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BookStore.ViewModels.Catalog.Categories.Validator
 {
-    public class CategoryUpdateRequestValidator : AbstractValidator<UpdateCategoryRequest>
+    public class CategoryUpdateRequestValidator : AbstractValidator<EditCategoryRequest>
     {
         public CategoryUpdateRequestValidator()
         {

@@ -1,4 +1,5 @@
 ﻿using BookStore.ViewModels.Catalog.Categories;
+using BookStore.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,21 +13,15 @@ namespace BookStore.Application.Catalog.Categories
 
         #region Admin App
 
-        Task<int> CreateCategory(CreateCategoryRequest request);
+        Task<ApiResult<PagedResult<CategoryVm>>> GetCategoriesPaging(GetCategoriesPagingRequest request);
 
-        Task<int> UpdateCategory(UpdateCategoryRequest request);
+        Task<ApiResult<bool>> CreateCategory(CreateCategoryRequest request);
 
-        Task<int> DeleteCategory(int categoryId);
+        Task<ApiResult<bool>> EditCategory(EditCategoryRequest request);
+
+        Task<ApiResult<bool>> DeleteCategory(int categoryId);
 
         #endregion Admin App
-
-        //---------------------------------------------------------------------------------//
-
-        #region Web App
-
-        //
-
-        #endregion Web App
 
         //---------------------------------------------------------------------------------//
 

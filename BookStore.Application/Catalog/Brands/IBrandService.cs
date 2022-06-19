@@ -14,7 +14,7 @@ namespace BookStore.Application.Catalog.Brands
 
         Task<int> CreateBrand(CreateBrandRequest request);
 
-        Task<int> UpdateBrand(UpdateBrandRequest request);
+        Task<int> UpdateBrand(EditBrandRequest request);
 
         Task<int> DeleteBrand(int BrandId);
 

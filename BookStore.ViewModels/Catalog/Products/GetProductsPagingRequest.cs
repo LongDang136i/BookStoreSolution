@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace BookStore.ViewModels.Catalog.Products
 {
-    public class GetProductsPagingRequest : PagingRequestBase
+    public class GetProductsPagingRequest : GetPagingRequestBase
     {
-        public string Keyword { get; set; }
         public string LanguageId { get; set; }
         public int? CategoryId { get; set; }
     }

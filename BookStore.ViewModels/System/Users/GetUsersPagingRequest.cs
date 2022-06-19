@@ -5,8 +5,8 @@ using System.Text;
 
 namespace BookStore.ViewModels.System.Users
 {
-    public class GetUsersPagingRequest : PagingRequestBase
+    public class GetUsersPagingRequest : GetPagingRequestBase
     {
-        public string Keyword { get; set; }
+        //public string RoleId { get; set;}
     }
 }

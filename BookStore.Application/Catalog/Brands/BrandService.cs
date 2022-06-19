@@ -72,7 +72,7 @@ namespace BookStore.Application.Catalog.Brands
             return brand.BrandId;
         }
 
-        public async Task<int> UpdateBrand(UpdateBrandRequest request)
+        public async Task<int> UpdateBrand(EditBrandRequest request)
         {
             //Lấy thông tin brand,brandTranslation theo id từ request,
             var brand = await _context.Brands.FindAsync(request.BrandId);

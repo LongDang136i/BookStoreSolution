@@ -116,14 +116,15 @@ namespace BookStore.ApiIntegration
         protected async Task<TResponse> GetAsync<TResponse>(string url)
         {
             var sessions = _httpContextAccessor
-                .HttpContext
-                .Session
-                .GetString(SystemConstants.AppSettings.Token);
+               .HttpContext
+               .Session
+               .GetString(SystemConstants.AppSettings.Token);
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var response = await client.GetAsync(url);
+
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
