@@ -19,7 +19,7 @@ namespace BookStore.Data.Entities
 
         public DateTime DateCreated { set; get; }
 
-        public bool? IsFeatured { set; get; }
+        public bool IsFeatured { set; get; }
 
         public List<ProductInCategory> ProductInCategories { get; set; }
 

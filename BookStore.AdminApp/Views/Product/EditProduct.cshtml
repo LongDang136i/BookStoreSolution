@@ -1,0 +1,134 @@
+﻿
+@model BookStore.ViewModels.Catalog.Products.EditProductRequest;
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@{
+    ViewData["Title"] = "EditProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+    <script>
+	ClassicEditor
+		.create( document.querySelector( '#txt_details' ), {
+			// toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+		} )
+		.then( editor => {
+			window.editor = editor;
+		} )
+		.catch( err => {
+			console.error( err.stack );
+		} );
+</script>
+}
+<h1>EditProduct</h1>
+
+<h4>EditProductRequest</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditProduct" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="ProductId" type="hidden" class="form-control" />
+                <input asp-for="DefaultImage" type="hidden" class="form-control"/>
+                <input asp-for="ProductImages" type="hidden" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Categories</label>                
+                @for(var i =0; i<@Model.CategoryAssign.Categories.Count; i++)
+                        {
+                            <div class="form-group">
+                            <label>
+                                @Model.CategoryAssign.Categories[i].Name                                
+                                <input type="checkbox" asp-for="CategoryAssign.Categories[i].Selected"/>
+                                <input type="hidden" asp-for="CategoryAssign.Categories[i].Id"/>
+                                <input type="hidden" asp-for="CategoryAssign.Categories[i].Name"/>
+                            </label>
+                            </div>
+                        }
+            </div>
+                 
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OriginalPrice" class="control-label"></label>
+                <input asp-for="OriginalPrice" class="form-control" />
+                <span asp-validation-for="OriginalPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Stock" class="control-label"></label>
+                <input asp-for="Stock" class="form-control" />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsFeatured" /> @Html.DisplayNameFor(model => model.IsFeatured)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Details" class="control-label"></label>
+                <textarea id="txt_details" asp-for="Details" rows="35" class="form-control"></textarea>
+                <span asp-validation-for="Details" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SeoDescription" class="control-label"></label>
+                <textarea asp-for="SeoDescription" rows="3" class="form-control"></textarea>
+                <span asp-validation-for="SeoDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SeoTitle" class="control-label"></label>
+                <input asp-for="SeoTitle" class="form-control" />
+                <span asp-validation-for="SeoTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SeoAlias" class="control-label"></label>
+                <input asp-for="SeoAlias" class="form-control" />
+                <span asp-validation-for="SeoAlias" class="text-danger"></span>
+            </div>
+           <div class="form-group">
+                <label asp-for="DefaultImage" class="control-label"></label>
+                <input asp-for="DefaultImage" type="hidden" class="form-control"/>
+                <img src="@(Configuration["BaseAddress"]+Model.ShowDefaultImage)" alt="Name" style="width:80px;">
+            </div>
+            <div class="form-group">
+                <label asp-for="DefaultImage" class="control-label"></label>
+                <input asp-for="DefaultImage" type="file" class="form-control"/>
+            </div> 
+            <div class="form-group">
+                <label class="control-label">List Product Image</label>
+                @foreach(var img in Model.ShowProductImages)
+                {
+                    
+                    <img src="@(Configuration["BaseAddress"]+img)" alt="Name" style="width:80px;">
+                }
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductImages" class="control-label"></label>
+                <input asp-for="ProductImages" type="file" class="form-control" multiple/>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

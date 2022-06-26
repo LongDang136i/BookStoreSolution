@@ -10,6 +10,6 @@ namespace BookStore.Application.System.Languages
 {
     public interface ILanguageService
     {
-        Task<ApiResult<List<LanguageVm>>> GetAll();
+        Task<ApiResult<List<LanguageVm>>> GetAllLanguages();
     }
 }

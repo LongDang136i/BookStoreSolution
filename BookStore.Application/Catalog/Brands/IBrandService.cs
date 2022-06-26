@@ -12,9 +12,9 @@ namespace BookStore.Application.Catalog.Brands
 
         #region Admin App
 
-        Task<int> CreateBrand(BrandCreateRequest request);
+        Task<int> CreateBrand(CreateBrandRequest request);
 
-        Task<int> UpdateBrand(BrandUpdateRequest request);
+        Task<int> UpdateBrand(EditBrandRequest request);
 
         Task<int> DeleteBrand(int BrandId);
 
@@ -24,7 +24,7 @@ namespace BookStore.Application.Catalog.Brands
 
         #region Both Admin & Web App
 
-        Task<List<BrandVm>> GetAllBrand(string languageId);
+        Task<List<BrandVm>> GetAllBrands(string languageId);
 
         Task<BrandVm> GetBrandById(string languageId, int brandId);
 

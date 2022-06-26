@@ -1,0 +1,114 @@
+﻿@using BookStore.ViewModels.Common
+@model PagedResult<BookStore.ViewModels.Catalog.Products.ProductListPagingVm>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+
+@{
+    ViewData["Title"] = "Product List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        setTimeout(function(){
+            $('#msgAlert').fadeOut('slow');
+        },2000);        
+    </script>
+}
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Product List</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item "><a href="/">Home Page</a></li>
+        <li class="breadcrumb-item active">Product List</li>
+    </ol>
+    
+    <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <a class="btn btn-success" asp-action="CreateProduct" asp-controller="Product">Create a new Product</a>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <form asp-action="Index" method="get">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Search" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                                <button type="button" onclick="window.location.href='/Product'" class="btn btn-dark">Reset</button>
+                            </div>
+
+                            <div class="col-md-4">
+                                <select name="categoryId" onchange="this.form.submit()" class="form-select" asp-items="@ViewBag.Categories">
+                                    <option>--Select Category--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-body">
+            <div class="row">
+                @if(ViewBag.SuccessMsg != null)
+                {
+                    <div id="msgAlert" class ="alert alert-success" role ="alert">
+                        @ViewBag.SuccessMsg
+                    </div>
+                }
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>            
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Isfeatured</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         @foreach (var item in Model.Items) {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>            
+                                <td>
+                                    <img src="@(Configuration["BaseAddress"]+item.ShowDefaultImage.ImagePath)" alt="@item.Name" style="width:50px;height:auto;">
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Stock)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IsFeatured)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("EditProduct", "EditProduct", new {  id=item.ProductId  }) |
+                                    @Html.ActionLink("ProductDetails", "ProductDetails", new { id=item.ProductId  }) |
+                                    @Html.ActionLink("DeleteProduct", "DeleteProduct", new { id=item.ProductId  })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>  
+        </div> 
+        @await Component.InvokeAsync("Pager", Model)
+     </div>
+</div>

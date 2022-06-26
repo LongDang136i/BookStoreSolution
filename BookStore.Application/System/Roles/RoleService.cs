@@ -1,4 +1,5 @@
 ﻿using BookStore.Data.Entities;
+using BookStore.ViewModels.Common;
 using BookStore.ViewModels.System.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,17 +20,22 @@ namespace BookStore.Application.System.Roles
             _roleManager = roleManager;
         }
 
-        public async Task<List<RoleVm>> GetAll()
+        public async Task<ApiResult<List<RoleVm>>> GetAllRoles()
         {
             //Lấy ra danh sách tất cả role tồn tại
-            var roles = await _roleManager.Roles.Select(x => new RoleVm()
+            var result = await _roleManager.Roles.Select(x => new RoleVm()
             {
                 RoleId = x.Id,
                 Name = x.Name,
                 Description = x.Description,
             }).ToListAsync();
 
-            return roles;
+            //Ktra kq
+            if (result == null)
+            {
+                return new ApiErrorResult<List<RoleVm>>("Problem when get roles!");
+            }
+            return new ApiSuccessResult<List<RoleVm>>(result);
         }
     }
 }

@@ -20,10 +20,14 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllRoles()
         {
-            var roles = await _roleService.GetAll();
-            return Ok(roles);
+            var result = await _roleService.GetAllRoles();
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }

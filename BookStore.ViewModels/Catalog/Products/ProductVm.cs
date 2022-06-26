@@ -1,4 +1,7 @@
-﻿using BookStore.ViewModels.Catalog.Categories;
+﻿using BookStore.Data.Entities;
+using BookStore.ViewModels.Catalog.Categories;
+using BookStore.ViewModels.Catalog.ProductImages;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,17 +16,21 @@ namespace BookStore.ViewModels.Catalog.Products
         public int Stock { set; get; }
         public int ViewCount { set; get; }
         public DateTime DateCreated { set; get; }
-        public bool? IsFeatured { set; get; }
+        public bool IsFeatured { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
         public string Details { set; get; }
         public string SeoDescription { set; get; }
         public string SeoTitle { set; get; }
-
-        public string ThumbnailImage { set; get; }
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
-
-        public List<string> Categories { get; set; } = new List<string>();
+        public List<CategoryVm> Categories { set; get; } = new List<CategoryVm>();
+        public CategoryAssignRequest CategoryAssign { get; set; } = new CategoryAssignRequest();
+        public ProductImageVm ShowDefaultImage { set; get; } = new ProductImageVm();
+        public List<ProductImageVm> ShowProductImages { get; set; } = new List<ProductImageVm>();
+        public List<IFormFile> AddImages { get; set; }
+        public IFormFile ChangeDefaultImage { get; set; }
+        public List<IFormFile> ProductImages { get; set; }
+        public IFormFile DefaultImage { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace BookStore.Data.Configurations
         {
             builder.ToTable("AppUsers");
 
-            builder.Property(x => x.FisrtName).HasMaxLength(256).IsRequired();
+            builder.Property(x => x.FirstName).HasMaxLength(256).IsRequired();
 
             builder.Property(x => x.LastName).HasMaxLength(256).IsRequired();
 

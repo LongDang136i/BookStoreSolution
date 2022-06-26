@@ -23,15 +23,27 @@ namespace BookStore.BackEndApi.Controllers
 
         #region Admin App
 
+        //http://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
+        [HttpGet("paging")]
+        [Authorize]
+        public async Task<IActionResult> GetUsersPaging([FromQuery] GetUsersPagingRequest request)
+        {
+            //Lấy ds người dùng
+            var users = await _userService.GetUsersPaging(request);
+            return Ok(users);
+        }
+
         //PUT: http://localhost/api/users/id
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserUpdateRequest request)
+        public async Task<IActionResult> EditUser([FromBody] EditUserRequest request)
         {
+            //Kiểm tra dữ liệu vào
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.UpdateUser(id, request);
+            //Chỉnh sửa thông tin người dùng
+            var result = await _userService.EditUser(request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
@@ -43,32 +55,25 @@ namespace BookStore.BackEndApi.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
+            //Xóa sửa thông tin người dùng theo id
             var result = await _userService.DeleteUser(id);
             return Ok(result);
         }
 
         [HttpPut("{id}/roles")]
         [Authorize]
-        public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
+        public async Task<IActionResult> RoleAssign([FromBody] RoleAssignRequest request)
         {
+            //Kiểm tra dữ liệu vào
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.RoleAssign(id, request);
+            var result = await _userService.RoleAssign(request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
             }
             return Ok(result);
-        }
-
-        //http://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
-        [HttpGet("paging")]
-        [Authorize]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
-        {
-            var products = await _userService.GetUserPaging(request);
-            return Ok(products);
         }
 
         #endregion Admin App
@@ -79,13 +84,16 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromForm] LoginRequest request)
+        public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
+            //Kiểm tra dữ liệu vào
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.Authencate(request);
+            //Lấy dữ liệu bằng cách gọi đến Application (UserService)
+            var result = await _userService.Authenticate(request);
 
+            //Ktra kết quả
             if (string.IsNullOrEmpty(result.ResultObj))
             {
                 return BadRequest(result);
@@ -95,11 +103,13 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
+            //Kiểm tra dữ liệu vào
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            //Tạo người dùng mới
             var result = await _userService.Register(request);
             if (!result.IsSuccessed)
             {
@@ -112,6 +122,7 @@ namespace BookStore.BackEndApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetUserById(Guid id)
         {
+            //Lấy thông tin người dùng theo id
             var user = await _userService.GetUserById(id);
             return Ok(user);
         }

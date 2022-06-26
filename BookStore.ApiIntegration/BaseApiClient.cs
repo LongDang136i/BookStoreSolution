@@ -13,7 +13,9 @@ namespace BookStore.ApiIntegration
 {
     public class BaseApiClient
     {
+        //Tạo các biến môi trường
         private readonly IHttpClientFactory _httpClientFactory;
+
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -26,7 +28,42 @@ namespace BookStore.ApiIntegration
             _httpClientFactory = httpClientFactory;
         }
 
-        protected async Task<TResponse> GetAsync<TResponse>(string url)
+        protected async Task<TResponse> PostAsync<TResponse>(string url, StringContent content)
+        {
+            //Tạo session và lấy token xác minh
+            var sessions = _httpContextAccessor
+            .HttpContext
+            .Session
+            .GetString(SystemConstants.AppSettings.Token);
+
+            //Tạo obj client
+            var client = _httpClientFactory.CreateClient();
+
+            //Gán địa chỉ cho client
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+
+            //kiểm tra thông tin session
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            //tạo response lấy dữ liệu bằng cách gọi đến BackEndApi (UsersController)
+            var response = await client.PostAsync(url, content);
+
+            //Tạo kết quả lấy giá trị bằng cách đọc response
+            var result = await response.Content.ReadAsStringAsync();
+
+            //Kiểm tra kết quả và trả về
+            if (response.IsSuccessStatusCode)
+            {
+                //Ép kiểu kết quả với kiểu dữ liệu tương ứng với phương thức gọi đến
+                TResponse myDeserializedObjList = (TResponse)JsonConvert.DeserializeObject(result,
+                    typeof(TResponse));
+
+                return myDeserializedObjList;
+            }
+            return JsonConvert.DeserializeObject<TResponse>(result);
+        }
+
+        protected async Task<TResponse> PutAsync<TResponse>(string url, StringContent content)
         {
             var sessions = _httpContextAccessor
                 .HttpContext
@@ -34,9 +71,60 @@ namespace BookStore.ApiIntegration
                 .GetString(SystemConstants.AppSettings.Token);
 
             var client = _httpClientFactory.CreateClient();
+
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var response = await client.PutAsync(url, content);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                TResponse myDeserializedObjList = (TResponse)JsonConvert.DeserializeObject(result,
+                    typeof(TResponse));
+
+                return myDeserializedObjList;
+            }
+            return JsonConvert.DeserializeObject<TResponse>(result);
+        }
+
+        protected async Task<TResponse> DeleteAsync<TResponse>(string url)
+        {
+            var sessions = _httpContextAccessor
+                .HttpContext
+                .Session
+                .GetString(SystemConstants.AppSettings.Token);
+
+            var client = _httpClientFactory.CreateClient();
+
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var response = await client.DeleteAsync(url);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                TResponse myDeserializedObjList = (TResponse)JsonConvert.DeserializeObject(result,
+                    typeof(TResponse));
+
+                return myDeserializedObjList;
+            }
+            return JsonConvert.DeserializeObject<TResponse>(result);
+        }
+
+        protected async Task<TResponse> GetAsync<TResponse>(string url)
+        {
+            var sessions = _httpContextAccessor
+               .HttpContext
+               .Session
+               .GetString(SystemConstants.AppSettings.Token);
+
+            var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var response = await client.GetAsync(url);
+
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
@@ -48,7 +136,7 @@ namespace BookStore.ApiIntegration
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
 
-        public async Task<List<T>> GetListAsync<T>(string url, bool requiredLogin = false)
+        protected async Task<List<T>> GetListAsync<T>(string url, bool requiredLogin = false)
         {
             var sessions = _httpContextAccessor
                .HttpContext
@@ -68,7 +156,7 @@ namespace BookStore.ApiIntegration
             throw new Exception(body);
         }
 
-        public async Task<bool> Delete(string url)
+        protected async Task<bool> Delete(string url)
         {
             var sessions = _httpContextAccessor
                .HttpContext

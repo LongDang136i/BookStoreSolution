@@ -36,17 +36,17 @@ namespace BookStore.Data.Migrations
                         new
                         {
                             Key = "HomeTitle",
-                            Value = "This is home page of eShopSolution"
+                            Value = "This is home page"
                         },
                         new
                         {
                             Key = "HomeKeyword",
-                            Value = "This is keyword of eShopSolution"
+                            Value = "This is keyword"
                         },
                         new
                         {
                             Key = "HomeDescription",
-                            Value = "This is description of eShopSolution"
+                            Value = "This is description"
                         });
                 });
 
@@ -78,7 +78,7 @@ namespace BookStore.Data.Migrations
                         new
                         {
                             Id = new Guid("d4965cc8-fdab-433f-ae1d-79540827db5a"),
-                            ConcurrencyStamp = "aa9b33dc-eaed-4aef-9120-68d694b2b445",
+                            ConcurrencyStamp = "1e939c0b-f3af-4998-b332-21994788ccee",
                             Description = "Administrator Role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -86,7 +86,7 @@ namespace BookStore.Data.Migrations
                         new
                         {
                             Id = new Guid("90057ee3-511a-4de1-94c2-93898f1018d9"),
-                            ConcurrencyStamp = "ff8b53de-9a94-46a6-a914-56301f46a356",
+                            ConcurrencyStamp = "97603df5-93ca-402e-94dd-9a9e777eea5e",
                             Description = "User Role",
                             Name = "user",
                             NormalizedName = "user"
@@ -114,7 +114,7 @@ namespace BookStore.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FisrtName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -157,46 +157,6 @@ namespace BookStore.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("1cee3d50-87bb-48d5-a493-376829c581c9"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7278ad41-e9fe-448b-835a-d8bb9eec0f42",
-                            Dob = new DateTime(2000, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "danglong136i@gmail.com",
-                            EmailConfirmed = true,
-                            FisrtName = "Long",
-                            LastName = "Dang",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "danglong136i@gmail.com",
-                            NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEO5XKr7WREkDdqiY3hbl6noVt9u9+z97ayFIiuzIg5XUL/kJZzNcqfAVIRDeYHiXtw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "Admin@123"
-                        },
-                        new
-                        {
-                            Id = new Guid("1a744cca-d50d-4369-8e41-3fe91db7cb1d"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "ab4d3321-c80c-44c8-917d-2dcf052483f4",
-                            Dob = new DateTime(2000, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "danglong@gmail.com",
-                            EmailConfirmed = true,
-                            FisrtName = "User",
-                            LastName = "Test",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "danglong@gmail.com",
-                            NormalizedUserName = "user",
-                            PasswordHash = "AQAAAAEAACcQAAAAEC7ORZ+ofNyicVrxPvyMcDKVS9+fSsHPP9ubrlOtFyi0I7xipuSky2rESJB43QJUig==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "User@123"
-                        });
                 });
 
             modelBuilder.Entity("BookStore.Data.Entities.Brand", b =>
@@ -797,7 +757,7 @@ namespace BookStore.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsFeatured")
+                    b.Property<bool>("IsFeatured")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("OriginalPrice")
@@ -819,218 +779,6 @@ namespace BookStore.Data.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            ProductId = 1,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 639, DateTimeKind.Local).AddTicks(6446),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 2,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7124),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 3,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7205),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 4,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7208),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 6,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7210),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 7,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7213),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 8,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7215),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 9,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7218),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 10,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7220),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 11,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7224),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 12,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7226),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 13,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7228),
-                            IsFeatured = true,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 14,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7230),
-                            IsFeatured = false,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 15,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7232),
-                            IsFeatured = false,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 16,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7234),
-                            IsFeatured = false,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 17,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7236),
-                            IsFeatured = false,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 18,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7238),
-                            IsFeatured = false,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 19,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7240),
-                            IsFeatured = false,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 20,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7242),
-                            IsFeatured = false,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 21,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7244),
-                            IsFeatured = false,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        },
-                        new
-                        {
-                            ProductId = 22,
-                            DateCreated = new DateTime(2022, 6, 10, 21, 6, 12, 640, DateTimeKind.Local).AddTicks(7246),
-                            IsFeatured = false,
-                            OriginalPrice = 200000m,
-                            Price = 210000m,
-                            Stock = 10,
-                            ViewCount = 0
-                        });
                 });
 
             modelBuilder.Entity("BookStore.Data.Entities.ProductImage", b =>
@@ -1086,23 +834,6 @@ namespace BookStore.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductInBrands");
-
-                    b.HasData(
-                        new
-                        {
-                            BrandId = 1,
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            BrandId = 2,
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            BrandId = 3,
-                            ProductId = 3
-                        });
                 });
 
             modelBuilder.Entity("BookStore.Data.Entities.ProductInCategory", b =>
@@ -1118,23 +849,6 @@ namespace BookStore.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductInCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            CategoryId = 1,
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            CategoryId = 2,
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            CategoryId = 3,
-                            ProductId = 3
-                        });
                 });
 
             modelBuilder.Entity("BookStore.Data.Entities.ProductTranslation", b =>
@@ -1185,80 +899,6 @@ namespace BookStore.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductTranslations");
-
-                    b.HasData(
-                        new
-                        {
-                            ProductTrId = 1,
-                            Description = "Áo sơ mi nam trắng Việt Tiến",
-                            Details = "Áo sơ mi nam trắng Việt Tiến",
-                            LanguageId = "vi",
-                            Name = "Áo sơ mi nam trắng Việt Tiến",
-                            ProductId = 1,
-                            SeoAlias = "ao-so-mi-nam-trang-viet-tien",
-                            SeoDescription = "Áo sơ mi nam trắng Việt Tiến",
-                            SeoTitle = "Áo sơ mi nam trắng Việt Tiến"
-                        },
-                        new
-                        {
-                            ProductTrId = 2,
-                            Description = "Viet Tien Men T-Shirt",
-                            Details = "Viet Tien Men T-Shirt",
-                            LanguageId = "en",
-                            Name = "Viet Tien Men T-Shirt",
-                            ProductId = 1,
-                            SeoAlias = "viet-tien-men-t-shirt",
-                            SeoDescription = "Viet Tien Men T-Shirt",
-                            SeoTitle = "Viet Tien Men T-Shirt"
-                        },
-                        new
-                        {
-                            ProductTrId = 3,
-                            Description = "Áo sơ mi nam trắng Việt Tiến",
-                            Details = "Áo sơ mi nam trắng Việt Tiến",
-                            LanguageId = "vi",
-                            Name = "Áo sơ mi nam trắng Việt Tiến",
-                            ProductId = 2,
-                            SeoAlias = "ao-so-mi-nam-trang-viet-tien",
-                            SeoDescription = "Áo sơ mi nam trắng Việt Tiến",
-                            SeoTitle = "Áo sơ mi nam trắng Việt Tiến"
-                        },
-                        new
-                        {
-                            ProductTrId = 4,
-                            Description = "Viet Tien Men T-Shirt",
-                            Details = "Viet Tien Men T-Shirt",
-                            LanguageId = "en",
-                            Name = "Viet Tien Men T-Shirt",
-                            ProductId = 2,
-                            SeoAlias = "viet-tien-men-t-shirt",
-                            SeoDescription = "Viet Tien Men T-Shirt",
-                            SeoTitle = "Viet Tien Men T-Shirt"
-                        },
-                        new
-                        {
-                            ProductTrId = 5,
-                            Description = "Áo sơ mi nam trắng Việt Tiến",
-                            Details = "Áo sơ mi nam trắng Việt Tiến",
-                            LanguageId = "vi",
-                            Name = "Áo sơ mi nam trắng Việt Tiến",
-                            ProductId = 3,
-                            SeoAlias = "ao-so-mi-nam-trang-viet-tien",
-                            SeoDescription = "Áo sơ mi nam trắng Việt Tiến",
-                            SeoTitle = "Áo sơ mi nam trắng Việt Tiến"
-                        },
-                        new
-                        {
-                            ProductTrId = 6,
-                            Description = "Viet Tien Men T-Shirt",
-                            Details = "Viet Tien Men T-Shirt",
-                            LanguageId = "en",
-                            Name = "Viet Tien Men T-Shirt",
-                            ProductId = 3,
-                            SeoAlias = "viet-tien-men-t-shirt",
-                            SeoDescription = "Viet Tien Men T-Shirt",
-                            SeoTitle = "Viet Tien Men T-Shirt"
-                        });
                 });
 
             modelBuilder.Entity("BookStore.Data.Entities.Promotion", b =>
@@ -1341,68 +981,6 @@ namespace BookStore.Data.Migrations
                     b.HasKey("SlideId");
 
                     b.ToTable("Slides");
-
-                    b.HasData(
-                        new
-                        {
-                            SlideId = 1,
-                            Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.",
-                            Image = "/themes/images/carousel/1.png",
-                            Name = "Second Thumbnail label",
-                            SortOrder = 1,
-                            Status = 1,
-                            Url = "#"
-                        },
-                        new
-                        {
-                            SlideId = 2,
-                            Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.",
-                            Image = "/themes/images/carousel/2.png",
-                            Name = "Second Thumbnail label",
-                            SortOrder = 2,
-                            Status = 1,
-                            Url = "#"
-                        },
-                        new
-                        {
-                            SlideId = 3,
-                            Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.",
-                            Image = "/themes/images/carousel/3.png",
-                            Name = "Second Thumbnail label",
-                            SortOrder = 3,
-                            Status = 1,
-                            Url = "#"
-                        },
-                        new
-                        {
-                            SlideId = 4,
-                            Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.",
-                            Image = "/themes/images/carousel/4.png",
-                            Name = "Second Thumbnail label",
-                            SortOrder = 4,
-                            Status = 1,
-                            Url = "#"
-                        },
-                        new
-                        {
-                            SlideId = 5,
-                            Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.",
-                            Image = "/themes/images/carousel/5.png",
-                            Name = "Second Thumbnail label",
-                            SortOrder = 5,
-                            Status = 1,
-                            Url = "#"
-                        },
-                        new
-                        {
-                            SlideId = 6,
-                            Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.",
-                            Image = "/themes/images/carousel/6.png",
-                            Name = "Second Thumbnail label",
-                            SortOrder = 6,
-                            Status = 1,
-                            Url = "#"
-                        });
                 });
 
             modelBuilder.Entity("BookStore.Data.Entities.Transaction", b =>
@@ -1521,18 +1099,6 @@ namespace BookStore.Data.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.ToTable("AppUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("1cee3d50-87bb-48d5-a493-376829c581c9"),
-                            RoleId = new Guid("d4965cc8-fdab-433f-ae1d-79540827db5a")
-                        },
-                        new
-                        {
-                            UserId = new Guid("1a744cca-d50d-4369-8e41-3fe91db7cb1d"),
-                            RoleId = new Guid("90057ee3-511a-4de1-94c2-93898f1018d9")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>

@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using BookStore.ViewModels.Catalog.ProductImages;
 
 namespace BookStore.ApiIntegration
 {
@@ -32,7 +33,23 @@ namespace BookStore.ApiIntegration
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<bool> CreateProduct(ProductCreateRequest request)
+        //---------------------------------------------------------------------------------//
+
+        #region Admin App
+
+        public async Task<ApiResult<PagedResult<ProductListPagingVm>>> GetProductsPaging(GetProductsPagingRequest request)
+        {
+            var data = await GetAsync<ApiResult<PagedResult<ProductListPagingVm>>>($"/api/products/paging?" +
+                $"pageIndex={request.PageIndex}" +
+                $"&pageSize={request.PageSize}" +
+                $"&keyword={request.Keyword}" +
+                $"&languageId={request.LanguageId}" +
+                $"&categoryId={request.CategoryId}");
+
+            return data;
+        }
+
+        public async Task<ApiResult<int>> CreateProduct(CreateProductRequest request)
         {
             var sessions = _httpContextAccessor
                 .HttpContext
@@ -47,17 +64,29 @@ namespace BookStore.ApiIntegration
 
             var requestContent = new MultipartFormDataContent();
 
-            if (request.ThumbnailImage != null)
+            if (request.DefaultImage != null)
             {
                 byte[] data;
-                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
+                using (var br = new BinaryReader(request.DefaultImage.OpenReadStream()))
                 {
-                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
+                    data = br.ReadBytes((int)request.DefaultImage.OpenReadStream().Length);
                 }
                 ByteArrayContent bytes = new ByteArrayContent(data);
-                requestContent.Add(bytes, "thumbnailImage", request.ThumbnailImage.FileName);
+                requestContent.Add(bytes, "defaultImage", request.DefaultImage.FileName);
             }
-
+            if (request.ProductImages != null)
+            {
+                foreach (var image in request.ProductImages)
+                {
+                    byte[] data;
+                    using (var br = new BinaryReader(image.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)image.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    requestContent.Add(bytes, "productImages", image.FileName);
+                }
+            }
             requestContent.Add(new StringContent(request.Price.ToString()), "price");
             requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "originalPrice");
             requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
@@ -68,13 +97,25 @@ namespace BookStore.ApiIntegration
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoDescription) ? "" : request.SeoDescription.ToString()), "seoDescription");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoTitle) ? "" : request.SeoTitle.ToString()), "seoTitle");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoAlias) ? "" : request.SeoAlias.ToString()), "seoAlias");
+            requestContent.Add(new StringContent(request.IsFeatured.ToString()), "isFeatured");
             requestContent.Add(new StringContent(languageId), "languageId");
 
             var response = await client.PostAsync($"/api/products/", requestContent);
-            return response.IsSuccessStatusCode;
+
+            //var json = JsonConvert.SerializeObject(request.CategoryAssign);
+            //var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            //var responseCat = await client.PutAsync($"/api/products/{request.ProductId}/categories", httpContent);
+            //Kiểm tra kết quả và trả về
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return new ApiSuccessResult<int>("Create new product successful!");
+            }
+            return new ApiErrorResult<int>("Problem when create new product");
         }
 
-        public async Task<bool> UpdateProduct(ProductUpdateRequest request)
+        public async Task<ApiResult<int>> EditProduct(EditProductRequest request)
         {
             var sessions = _httpContextAccessor
                 .HttpContext
@@ -89,19 +130,32 @@ namespace BookStore.ApiIntegration
 
             var requestContent = new MultipartFormDataContent();
 
-            if (request.ThumbnailImage != null)
+            if (request.DefaultImage != null)
             {
                 byte[] data;
-                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
+                using (var br = new BinaryReader(request.DefaultImage.OpenReadStream()))
                 {
-                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
+                    data = br.ReadBytes((int)request.DefaultImage.OpenReadStream().Length);
                 }
                 ByteArrayContent bytes = new ByteArrayContent(data);
-                requestContent.Add(bytes, "thumbnailImage", request.ThumbnailImage.FileName);
+                requestContent.Add(bytes, "defaultImage", request.DefaultImage.FileName);
             }
-
-            //requestContent.Add(new StringContent(request.Id.ToString()), "id");
-
+            if (request.ProductImages != null)
+            {
+                foreach (var image in request.ProductImages)
+                {
+                    byte[] data;
+                    using (var br = new BinaryReader(image.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)image.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    requestContent.Add(bytes, "productImages", image.FileName);
+                }
+            }
+            requestContent.Add(new StringContent(request.Price.ToString()), "price");
+            requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "originalPrice");
+            requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Name) ? "" : request.Name.ToString()), "name");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Description) ? "" : request.Description.ToString()), "description");
 
@@ -109,63 +163,62 @@ namespace BookStore.ApiIntegration
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoDescription) ? "" : request.SeoDescription.ToString()), "seoDescription");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoTitle) ? "" : request.SeoTitle.ToString()), "seoTitle");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.SeoAlias) ? "" : request.SeoAlias.ToString()), "seoAlias");
+            requestContent.Add(new StringContent(request.IsFeatured.ToString()), "isFeatured");
             requestContent.Add(new StringContent(languageId), "languageId");
 
             var response = await client.PutAsync($"/api/products/" + request.ProductId, requestContent);
-            return response.IsSuccessStatusCode;
-        }
 
-        public async Task<PagedResult<ProductVm>> GetPagings(GetProductPagingRequest request)
-        {
-            var data = await GetAsync<PagedResult<ProductVm>>(
-                $"/api/products/paging?pageIndex={request.PageIndex}" +
-                $"&pageSize={request.PageSize}" +
-                $"&keyword={request.Keyword}&languageId={request.LanguageId}&categoryId={request.CategoryId}");
-
-            return data;
-        }
-
-        public async Task<ApiResult<bool>> CategoryAssign(int productId, CategoryAssignRequest request)
-        {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-
-            var json = JsonConvert.SerializeObject(request);
+            var json = JsonConvert.SerializeObject(request.CategoryAssign);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await client.PutAsync($"/api/products/{productId}/categories", httpContent);
-            var result = await response.Content.ReadAsStringAsync();
+            var responseCat = await client.PutAsync($"/api/products/{request.ProductId}/categories", httpContent);
+            //Kiểm tra kết quả và trả về
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+            {
+                return new ApiSuccessResult<int>("Update product information successful!");
+            }
+            return new ApiErrorResult<int>("Problem when update product information!");
         }
 
-        public async Task<ProductVm> GetById(int productId, string languageId)
+        public async Task<ApiResult<bool>> DeleteProduct(int productId)
         {
-            var data = await GetAsync<ProductVm>($"/api/products/{productId}/{languageId}");
+            return await DeleteAsync<ApiResult<bool>>($"/api/products/{productId}");
+        }
+
+        #endregion Admin App
+
+        //---------------------------------------------------------------------------------//
+
+        #region Both Admin & Web App
+
+        public async Task<ApiResult<ProductDetailVm>> GetProductById(string languageId, int productId)
+        {
+            var data = await GetAsync<ApiResult<ProductDetailVm>>($"/api/products/{productId}/{languageId}");
 
             return data;
         }
 
-        public async Task<List<ProductVm>> GetFeaturedProducts(string languageId, int take)
+        public async Task<ApiResult<List<ProductImageVm>>> GetProductImageByProductId(int productId)
         {
-            var data = await GetListAsync<ProductVm>($"/api/products/featured/{languageId}/{take}");
+            var data = await GetAsync<ApiResult<List<ProductImageVm>>>($"/api/products/productimages/{productId}/");
+
             return data;
         }
 
-        public async Task<List<ProductVm>> GetLatestProducts(string languageId, int take)
-        {
-            var data = await GetListAsync<ProductVm>($"/api/products/latest/{languageId}/{take}");
-            return data;
-        }
+        #endregion Both Admin & Web App
 
-        public async Task<bool> DeleteProduct(int productId)
-        {
-            return await Delete($"/api/products/" + productId);
-        }
+        //---------------------------------------------------------------------------------//
+
+        //public async Task<List<ProductVm>> GetFeaturedProducts(string languageId, int take)
+        //{
+        //    var data = await GetListAsync<ProductVm>($"/api/products/featured/{languageId}/{take}");
+        //    return data;
+        //}
+
+        //public async Task<List<ProductVm>> GetLatestProducts(string languageId, int take)
+        //{
+        //    var data = await GetListAsync<ProductVm>($"/api/products/latest/{languageId}/{take}");
+        //    return data;
+        //}
     }
 }

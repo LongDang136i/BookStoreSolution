@@ -17,9 +17,10 @@ namespace BookStore.ApiIntegration
         public LanguageApiClient(IHttpClientFactory httpClientFactory,
                    IHttpContextAccessor httpContextAccessor,
                     IConfiguration configuration)
-            : base(httpClientFactory, httpContextAccessor, configuration) { }
+            : base(httpClientFactory, httpContextAccessor, configuration)
+        { }
 
-        public async Task<ApiResult<List<LanguageVm>>> GetAll()
+        public async Task<ApiResult<List<LanguageVm>>> GetAllLanguages()
         {
             return await GetAsync<ApiResult<List<LanguageVm>>>("/api/languages");
         }

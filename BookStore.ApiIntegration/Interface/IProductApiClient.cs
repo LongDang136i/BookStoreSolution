@@ -1,4 +1,5 @@
-﻿using BookStore.ViewModels.Catalog.Products;
+﻿using BookStore.ViewModels.Catalog.ProductImages;
+using BookStore.ViewModels.Catalog.Products;
 using BookStore.ViewModels.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,20 +8,22 @@ namespace BookStore.ApiIntegration.Interface
 {
     public interface IProductApiClient
     {
-        Task<PagedResult<ProductVm>> GetPagings(GetProductPagingRequest request);
+        Task<ApiResult<PagedResult<ProductListPagingVm>>> GetProductsPaging(GetProductsPagingRequest request);
 
-        Task<bool> CreateProduct(ProductCreateRequest request);
+        Task<ApiResult<int>> CreateProduct(CreateProductRequest request);
 
-        Task<bool> UpdateProduct(ProductUpdateRequest request);
+        Task<ApiResult<int>> EditProduct(EditProductRequest request);
 
-        Task<bool> DeleteProduct(int productId);
+        Task<ApiResult<bool>> DeleteProduct(int productId);
 
-        Task<ApiResult<bool>> CategoryAssign(int productId, CategoryAssignRequest request);
+        //Task<ApiResult<bool>> CategoryAssign(int productId, CategoryAssignRequest request);
 
-        Task<ProductVm> GetById(int productId, string languageId);
+        Task<ApiResult<ProductDetailVm>> GetProductById(string languageId, int productId);
 
-        Task<List<ProductVm>> GetFeaturedProducts(string languageId, int take);
+        //Task<List<ProductVm>> GetFeaturedProducts(string languageId, int take);
 
-        Task<List<ProductVm>> GetLatestProducts(string languageId, int take);
+        //Task<List<ProductVm>> GetLatestProducts(string languageId, int take);
+
+        Task<ApiResult<List<ProductImageVm>>> GetProductImageByProductId(int productId);
     }
 }
