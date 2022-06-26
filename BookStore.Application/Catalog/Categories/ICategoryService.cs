@@ -15,9 +15,9 @@ namespace BookStore.Application.Catalog.Categories
 
         Task<ApiResult<PagedResult<CategoryVm>>> GetCategoriesPaging(GetCategoriesPagingRequest request);
 
-        Task<ApiResult<bool>> CreateCategory(CreateCategoryRequest request);
+        Task<ApiResult<int>> CreateCategory(CreateCategoryRequest request);
 
-        Task<ApiResult<bool>> EditCategory(EditCategoryRequest request);
+        Task<ApiResult<int>> EditCategory(EditCategoryRequest request);
 
         Task<ApiResult<bool>> DeleteCategory(int categoryId);
 
@@ -27,9 +27,9 @@ namespace BookStore.Application.Catalog.Categories
 
         #region Both Admin & Web App
 
-        Task<List<CategoryVm>> GetAllCategories(string languageId);
+        Task<ApiResult<List<CategoryVm>>> GetAllCategories(string languageId);
 
-        Task<CategoryVm> GetCategoryById(string languageId, int categoryId);
+        Task<ApiResult<CategoryVm>> GetCategoryById(string languageId, int categoryId);
 
         #endregion Both Admin & Web App
     }

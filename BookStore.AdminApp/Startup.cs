@@ -81,6 +81,7 @@ namespace BookStore.AdminApp
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseAuthentication();

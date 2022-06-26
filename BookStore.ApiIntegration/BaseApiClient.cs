@@ -32,9 +32,9 @@ namespace BookStore.ApiIntegration
         {
             //Tạo session và lấy token xác minh
             var sessions = _httpContextAccessor
-                .HttpContext
-                .Session
-                .GetString(SystemConstants.AppSettings.Token);
+            .HttpContext
+            .Session
+            .GetString(SystemConstants.AppSettings.Token);
 
             //Tạo obj client
             var client = _httpClientFactory.CreateClient();

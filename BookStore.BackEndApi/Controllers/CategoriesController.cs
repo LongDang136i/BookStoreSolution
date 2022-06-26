@@ -26,22 +26,27 @@ namespace BookStore.BackEndApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetCategoriesPaging([FromQuery] GetCategoriesPagingRequest request)
         {
-            var categories = await _categoryService.GetCategoriesPaging(request);
-            return Ok(categories);
+            //Gửi request đến Application
+            var result = await _categoryService.GetCategoriesPaging(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateCategoryRequest request)
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequest request)
         {
-            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            //Tạo category mới
+            //Gửi request đến Application
             var result = await _categoryService.CreateCategory(request);
+
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
@@ -49,32 +54,32 @@ namespace BookStore.BackEndApi.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{categoryId}")]
         [Authorize]
-        public async Task<IActionResult> EditCategory(int id, [FromBody] EditCategoryRequest request)
+        public async Task<IActionResult> EditCategory([FromBody] EditCategoryRequest request)
         {
-            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            request.CategoryId = id;
 
-            //Thực hiện cập nhật và ktra kq
+            //Gửi request đến Application
             var result = await _categoryService.EditCategory(request);
+
             if (!result.IsSuccessed)
             {
-                return BadRequest(result);
+                return BadRequest(result.Message);
             }
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{categoryId}")]
         [Authorize]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> DeleteCategory(int categoryId)
         {
-            //Thực hiện xóa và ktra kq
-            var result = await _categoryService.DeleteCategory(id);
+            //Gửi request đến Application
+            var result = await _categoryService.DeleteCategory(categoryId);
+
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
@@ -92,16 +97,28 @@ namespace BookStore.BackEndApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllCategories(string languageId)
         {
-            var categories = await _categoryService.GetAllCategories(languageId);
-            return Ok(categories);
+            //Gửi request đến Application
+            var result = await _categoryService.GetAllCategories(languageId);
+
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        [HttpGet("{id}/{languageId}")]
+        [HttpGet("{categoryId}/{languageId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetCategoryById(string languageId, int id)
+        public async Task<IActionResult> GetCategoryById(string languageId, int categoryId)
         {
-            var category = await _categoryService.GetCategoryById(languageId, id);
-            return Ok(category);
+            //Gửi request đến Application
+            var result = await _categoryService.GetCategoryById(languageId, categoryId);
+
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         #endregion Both Admin & Web App

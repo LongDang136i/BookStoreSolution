@@ -15,11 +15,11 @@ namespace BookStore.Application.System.Users
 
         Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUsersPagingRequest request);
 
-        Task<ApiResult<bool>> EditUser(Guid id, EditUserRequest request);
+        Task<ApiResult<bool>> EditUser(EditUserRequest request);
 
         Task<ApiResult<bool>> DeleteUser(Guid id);
 
-        Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
+        Task<ApiResult<bool>> RoleAssign(RoleAssignRequest request);
 
         #endregion Admin App
 

@@ -25,7 +25,8 @@ namespace BookStore.AdminApp.Controllers
             //Lấy Token Authorize và LanguageId
             var sessions = HttpContext.Session.GetString("Token");
             var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
-            //Tạo request lấy ds Category
+
+            //Tạo request
             var request = new GetCategoriesPagingRequest()
             {
                 BearerToken = sessions,
@@ -35,16 +36,16 @@ namespace BookStore.AdminApp.Controllers
                 LanguageId = languageId
             };
 
-            //Gửi request lấy ds người dùng
+            //Gửi request đến ApiIntergration
             var data = await _categoryApiClient.GetCategoriesPaging(request);
 
             //tạo ViewBag lưu từ khóa cho ô tìm kiếm
             ViewBag.Keyword = keyword;
 
             //Thông báo kết quả bằng TempData
-            if (TempData["result"] != null)
+            if (TempData["message"] != null)
             {
-                ViewBag.SuccessMsg = TempData["result"];
+                ViewBag.SuccessMsg = TempData["message"];
             }
 
             //Trả về kết quả
@@ -62,7 +63,10 @@ namespace BookStore.AdminApp.Controllers
         {
             //Ktra dữ liệu vào
             if (!ModelState.IsValid)
+            {
                 return View();
+            }
+
             var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
             request.LanguageId = languageId;
 
@@ -70,9 +74,10 @@ namespace BookStore.AdminApp.Controllers
             var result = await _categoryApiClient.CreateCategory(request);
             if (result.IsSuccessed)
             {
-                TempData["result"] = "Create a new User successful";
+                TempData["message"] = result.Message;
                 return RedirectToAction("Index");
             }
+
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
@@ -82,36 +87,38 @@ namespace BookStore.AdminApp.Controllers
         {
             var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
             var category = await _categoryApiClient.GetCategoryById(languageId, id);
+
             var editRequest = new EditCategoryRequest()
             {
-                Name = category.Name,
-                SeoAlias = category.SeoAlias,
-                SeoDescription = category.SeoDescription,
-                SeoTitle = category.SeoTitle,
-                SortOrder = category.SortOrder,
-                Status = category.Status,
-                IsShowOnHome = category.IsShowOnHome,
-                ParentId = category.ParentId,
-                LanguageId = languageId,
+                CategoryId = category.ResultObj.CategoryId,
+                Name = category.ResultObj.Name,
+                SeoAlias = category.ResultObj.SeoAlias,
+                SeoDescription = category.ResultObj.SeoDescription,
+                SeoTitle = category.ResultObj.SeoTitle,
+                SortOrder = category.ResultObj.SortOrder,
+                Status = category.ResultObj.Status,
+                IsShowOnHome = category.ResultObj.IsShowOnHome,
+                ParentId = category.ResultObj.ParentId,
+                LanguageId = category.ResultObj.LanguageId,
             };
             return View(editRequest);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditCategory(int id, EditCategoryRequest request)
+        public async Task<IActionResult> EditCategory(EditCategoryRequest request)
         {
             if (!ModelState.IsValid)
+            {
                 return View();
+            }
 
-            var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
-            request.LanguageId = languageId;
-
-            var result = await _categoryApiClient.EditCategory(id, request);
+            var result = await _categoryApiClient.EditCategory(request);
             if (result.IsSuccessed)
             {
-                TempData["result"] = "Edit category successful";
+                TempData["message"] = result.Message;
                 return RedirectToAction("Index");
             }
+
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
@@ -126,14 +133,17 @@ namespace BookStore.AdminApp.Controllers
         public async Task<IActionResult> DeleteCategory(DeleteCategoryRequest request)
         {
             if (!ModelState.IsValid)
+            {
                 return View();
+            }
 
             var result = await _categoryApiClient.DeleteCategory(request.CategoryId);
             if (result.IsSuccessed)
             {
-                TempData["result"] = "Delete category successful";
+                TempData["message"] = result.Message;
                 return RedirectToAction("Index");
             }
+
             ModelState.AddModelError("", result.Message);
             return View(request);
         }

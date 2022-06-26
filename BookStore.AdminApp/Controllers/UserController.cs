@@ -14,12 +14,14 @@ namespace BookStore.AdminApp.Controllers
     public class UserController : BaseController
     {
         private IUserApiClient _userApiClient;
+        private IRoleApiClient _roleApiClient;
         private IConfiguration _configuration;
 
-        public UserController(IUserApiClient userApiClient, IConfiguration configuration)
+        public UserController(IUserApiClient userApiClient, IConfiguration configuration, IRoleApiClient roleApiClient)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
+            _roleApiClient = roleApiClient;
         }
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
@@ -27,7 +29,7 @@ namespace BookStore.AdminApp.Controllers
             //Lấy Token Authorize
             var sessions = HttpContext.Session.GetString("Token");
 
-            //Tạo request lấy ds người dùng
+            //Tạo request
             var request = new GetUsersPagingRequest()
             {
                 BearerToken = sessions,
@@ -36,7 +38,7 @@ namespace BookStore.AdminApp.Controllers
                 PageSize = pageSize
             };
 
-            //Gửi request lấy ds người dùng
+            //Gửi request
             var data = await _userApiClient.GetUsersPaging(request);
 
             //tạo ViewBag lưu từ khóa cho ô tìm kiếm
@@ -47,7 +49,6 @@ namespace BookStore.AdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
-
             //Trả về kết quả
             return View(data.ResultObj);
         }
@@ -64,14 +65,6 @@ namespace BookStore.AdminApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> UserDetails(Guid id)
-        {
-            //Gửi request lấy thông tin người dùng theo id
-            var result = await _userApiClient.GetUserById(id);
-            return View(result.ResultObj);
-        }
-
-        [HttpGet]
         public IActionResult RegisterUser()
         {
             return View();
@@ -80,15 +73,15 @@ namespace BookStore.AdminApp.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterUser(RegisterRequest request)
         {
-            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
+            {
                 return View();
-
+            }
             //gửi request đăng kí người dùng
             var result = await _userApiClient.RegisterUser(request);
             if (result.IsSuccessed)
             {
-                TempData["result"] = "Create a new User successful";
+                TempData["result"] = result.Message;
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", result.Message);
@@ -120,12 +113,13 @@ namespace BookStore.AdminApp.Controllers
         public async Task<IActionResult> EditUser(EditUserRequest request)
         {
             if (!ModelState.IsValid)
+            {
                 return View();
-
-            var result = await _userApiClient.EditUser(request.UserId, request);
+            }
+            var result = await _userApiClient.EditUser(request);
             if (result.IsSuccessed)
             {
-                TempData["result"] = "Edit User successful";
+                TempData["result"] = result.Message;
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", result.Message);
@@ -142,16 +136,70 @@ namespace BookStore.AdminApp.Controllers
         public async Task<IActionResult> DeleteUser(DeleteUserRequest request)
         {
             if (!ModelState.IsValid)
+            {
                 return View();
-
+            }
             var result = await _userApiClient.DeleteUser(request.UserId);
             if (result.IsSuccessed)
             {
-                TempData["result"] = "Xóa người dùng thành công";
+                TempData["result"] = result.Message;
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RoleAssign(Guid id)
+        {
+            var roleAssignRequest = await GetRoleAssignRequest(id);
+            roleAssignRequest.UserId = id;
+            return View(roleAssignRequest);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RoleAssign(RoleAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _userApiClient.RoleAssign(request);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = result.Message;
+                return RedirectToAction("Index");
+            }
+
+            var roleAssignRequest = await GetRoleAssignRequest(request.UserId);
+
+            return View(roleAssignRequest);
+        }
+
+        private async Task<RoleAssignRequest> GetRoleAssignRequest(Guid id)
+        {
+            var userObj = await _userApiClient.GetUserById(id);
+
+            var roleObj = await _roleApiClient.GetAllRoles();
+
+            var roleAssignRequest = new RoleAssignRequest();
+            foreach (var role in roleObj.ResultObj)
+            {
+                roleAssignRequest.Roles.Add(new SelectItem()
+                {
+                    Id = role.RoleId.ToString(),
+                    Name = role.Name,
+                    Selected = userObj.ResultObj.Roles.Contains(role.Name)
+                });
+            }
+            return roleAssignRequest;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UserDetails(Guid id)
+        {
+            //Gửi request lấy thông tin người dùng theo id
+            var result = await _userApiClient.GetUserById(id);
+            return View(result.ResultObj);
         }
     }
 }

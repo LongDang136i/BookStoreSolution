@@ -36,14 +36,14 @@ namespace BookStore.BackEndApi.Controllers
         //PUT: http://localhost/api/users/id
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> EditUser(Guid id, [FromBody] EditUserRequest request)
+        public async Task<IActionResult> EditUser([FromBody] EditUserRequest request)
         {
             //Kiểm tra dữ liệu vào
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             //Chỉnh sửa thông tin người dùng
-            var result = await _userService.EditUser(id, request);
+            var result = await _userService.EditUser(request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
@@ -62,13 +62,13 @@ namespace BookStore.BackEndApi.Controllers
 
         [HttpPut("{id}/roles")]
         [Authorize]
-        public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
+        public async Task<IActionResult> RoleAssign([FromBody] RoleAssignRequest request)
         {
             //Kiểm tra dữ liệu vào
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.RoleAssign(id, request);
+            var result = await _userService.RoleAssign(request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

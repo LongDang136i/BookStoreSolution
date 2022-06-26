@@ -139,6 +139,8 @@ namespace BookStore.BackEndApi
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseAuthentication();
 
             app.UseRouting();

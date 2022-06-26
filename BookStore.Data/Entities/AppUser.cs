@@ -8,7 +8,7 @@ namespace BookStore.Data.Entities
 {
     public class AppUser : IdentityUser<Guid>
     {
-        public String FisrtName { get; set; }
+        public String FirstName { get; set; }
 
         public String LastName { get; set; }
 

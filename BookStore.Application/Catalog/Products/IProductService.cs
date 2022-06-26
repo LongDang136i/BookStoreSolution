@@ -1,4 +1,5 @@
-﻿using BookStore.ViewModels.Catalog.ProductImages;
+﻿using BookStore.Data.Entities;
+using BookStore.ViewModels.Catalog.ProductImages;
 using BookStore.ViewModels.Catalog.Products;
 using BookStore.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
@@ -13,17 +14,19 @@ namespace BookStore.Application.Catalog.Products
 
         #region Admin App
 
-        Task<int> CreateProduct(ProductCreateRequest request);
+        Task<ApiResult<PagedResult<ProductListPagingVm>>> GetProductsPaging(GetProductsPagingRequest request);
 
-        Task<int> UpdateProduct(ProductUpdateRequest request);
+        Task<ApiResult<int>> CreateProduct(CreateProductRequest request);
 
-        Task<int> DeleteProduct(int productId);
+        Task<ApiResult<int>> EditProduct(EditProductRequest request);
 
-        Task<int> CreateProductImage(int productId, CreateProductImageRequest request);
+        Task<ApiResult<bool>> DeleteProduct(int productId);
 
-        Task<int> RemoveProductImage(int imageId);
+        //Task<int> CreateProductImage(int productId, CreateProductImageRequest request);
 
-        Task<int> UpdateProductImage(int imageId, UpdateProductImageRequest request);
+        //Task<int> RemoveProductImage(int imageId);
+
+        //Task<int> UpdateProductImage(int imageId, EditProductImageRequest request);
 
         Task<ApiResult<bool>> CategoryAssign(int productId, CategoryAssignRequest request);
 
@@ -43,9 +46,9 @@ namespace BookStore.Application.Catalog.Products
 
         #region Both Admin & Web App
 
-        Task<ProductVm> GetProductById(int productId, string languageId);
+        Task<ApiResult<ProductDetailVm>> GetProductById(string languageId, int productId);
 
-        Task<PagedResult<ProductVm>> GetProductsPaging(GetProductsPagingRequest request);
+        Task<ApiResult<List<ProductImageVm>>> GetProductImageByProductId(int productId);
 
         Task<PagedResult<ProductVm>> GetProductByCategoryId(string languageId, GetProductsPagingRequest request);
 

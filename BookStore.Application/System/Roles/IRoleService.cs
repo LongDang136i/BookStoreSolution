@@ -1,4 +1,5 @@
-﻿using BookStore.ViewModels.System.Roles;
+﻿using BookStore.ViewModels.Common;
+using BookStore.ViewModels.System.Roles;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,6 @@ namespace BookStore.Application.System.Roles
 {
     public interface IRoleService
     {
-        Task<List<RoleVm>> GetAllRoles();
+        Task<ApiResult<List<RoleVm>>> GetAllRoles();
     }
 }

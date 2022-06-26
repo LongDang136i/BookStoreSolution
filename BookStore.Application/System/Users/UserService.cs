@@ -44,10 +44,29 @@ namespace BookStore.Application.System.Users
             {
                 query = query.Where(x => x.UserName.Contains(request.Keyword)
                 || x.PhoneNumber.Contains(request.Keyword)
-                || x.FisrtName.Contains(request.Keyword)
+                || x.FirstName.Contains(request.Keyword)
                 || x.LastName.Contains(request.Keyword)
                 || x.Email.Contains(request.Keyword));
             }
+
+            //var userList = new List<UserVm>();
+            ////lấy ra role của user
+            //foreach (var user in query)
+            //{
+            //  var role = await _userManager.GetRolesAsync(user);
+            //    var userVm = new UserVm()
+            //    {
+            //        Email = user.Email,
+            //        PhoneNumber = user.PhoneNumber,
+            //        UserName = user.UserName,
+            //        FirstName = user.FirstName,
+            //        LastName = user.LastName,
+            //        UserId = user.Id,
+            //        Dob = user.Dob,
+            //        Roles = role
+            //    };
+            //    userList.Add(userVm);
+            //}
 
             //Đếm tổng bản ghi
             int totalRow = await query.CountAsync();
@@ -56,18 +75,18 @@ namespace BookStore.Application.System.Users
              * - Bỏ qua n bản ghi với n = (PageIndex -1) * PageSize (ví dụ trang thứ 3 sẽ bỏ qua (3-1) * 10 = 20, bắt đầu lấy từ bản ghi 21
              * - Lấy pageSize bản ghi cho vào List
              */
-            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+            var data = query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new UserVm()
                 {
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     UserName = x.UserName,
-                    FirstName = x.FisrtName,
+                    FirstName = x.FirstName,
                     LastName = x.LastName,
                     UserId = x.Id,
                     Dob = x.Dob,
-                }).ToListAsync();
+                }).ToList();
 
             //Tạo thông tin cho trang kết quả
             var pagedResult = new PagedResult<UserVm>()
@@ -80,19 +99,19 @@ namespace BookStore.Application.System.Users
             return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
         }
 
-        public async Task<ApiResult<bool>> EditUser(Guid id, EditUserRequest request)
+        public async Task<ApiResult<bool>> EditUser(EditUserRequest request)
         {
             //Ktra nếu email nhập vào đã tồn tại ở người dùng khác
-            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != request.UserId))
             {
-                return new ApiErrorResult<bool>("Email has been register by another user");
+                return new ApiErrorResult<bool>("Email has been register by another user!");
             }
 
             //Thõa điều kiện thì lấy ra user theo id, gán thông tin mới
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             user.Dob = request.Dob;
             user.Email = request.Email;
-            user.FisrtName = request.FirstName;
+            user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.PhoneNumber = request.PhoneNumber;
 
@@ -100,9 +119,9 @@ namespace BookStore.Application.System.Users
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                return new ApiSuccessResult<bool>();
+                return new ApiSuccessResult<bool>("Update user information successful!");
             }
-            return new ApiErrorResult<bool>("Can not update user");
+            return new ApiErrorResult<bool>("Problem when update user information!");
         }
 
         public async Task<ApiResult<bool>> DeleteUser(Guid id)
@@ -116,14 +135,16 @@ namespace BookStore.Application.System.Users
             //Thực hiện xóa và ktra kq trả về
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
-                return new ApiSuccessResult<bool>();
-            return new ApiErrorResult<bool>("Delete fail");
+            {
+                return new ApiSuccessResult<bool>("Delete user successful!");
+            }
+            return new ApiErrorResult<bool>("Problem when delete user!");
         }
 
-        public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
+        public async Task<ApiResult<bool>> RoleAssign(RoleAssignRequest request)
         {
             //Lấy ra user theo id, nếu ko tìm đc thì báo lỗi
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
             {
                 return new ApiErrorResult<bool>("User don't exist");
@@ -152,7 +173,7 @@ namespace BookStore.Application.System.Users
                 }
             }
 
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>("Role assign successful!");
         }
 
         #endregion Admin App
@@ -179,7 +200,7 @@ namespace BookStore.Application.System.Users
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email,user.Email),
-                new Claim(ClaimTypes.GivenName,user.FisrtName),
+                new Claim(ClaimTypes.GivenName,user.FirstName),
                 new Claim(ClaimTypes.Role,String.Join(";",roles)),
                 new Claim(ClaimTypes.Name,request.UserName),
             };
@@ -193,7 +214,7 @@ namespace BookStore.Application.System.Users
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: creds);
 
-            return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
+            return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token), "Login Success!");
         }
 
         public async Task<ApiResult<bool>> Register(RegisterRequest request)
@@ -213,7 +234,7 @@ namespace BookStore.Application.System.Users
             {
                 Dob = request.Dob,
                 Email = request.Email,
-                FisrtName = request.FirstName,
+                FirstName = request.FirstName,
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
                 UserName = request.UserName,
@@ -223,7 +244,7 @@ namespace BookStore.Application.System.Users
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                return new ApiSuccessResult<bool>();
+                return new ApiSuccessResult<bool>("Register successful!");
             }
             return new ApiErrorResult<bool>("Register fail");
         }
@@ -244,7 +265,7 @@ namespace BookStore.Application.System.Users
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 UserName = user.UserName,
-                FirstName = user.FisrtName,
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 Dob = user.Dob,
                 UserId = user.Id,

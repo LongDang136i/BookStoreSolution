@@ -15,7 +15,7 @@ namespace BookStore.ApiIntegration.Interface
 
         Task<ApiResult<bool>> CreateCategory(CreateCategoryRequest request);
 
-        Task<ApiResult<bool>> EditCategory(int categoryId, EditCategoryRequest request);
+        Task<ApiResult<bool>> EditCategory(EditCategoryRequest request);
 
         Task<ApiResult<bool>> DeleteCategory(int categoryId);
 
@@ -25,9 +25,9 @@ namespace BookStore.ApiIntegration.Interface
 
         #region Both Admin & Web App
 
-        Task<List<CategoryVm>> GetAllCategories(string languageId);
+        Task<ApiResult<List<CategoryVm>>> GetAllCategories(string languageId);
 
-        Task<CategoryVm> GetCategoryById(string languageId, int categoryId);
+        Task<ApiResult<CategoryVm>> GetCategoryById(string languageId, int categoryId);
 
         #endregion Both Admin & Web App
     }

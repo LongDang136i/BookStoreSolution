@@ -22,8 +22,7 @@ namespace BookStore.ApiIntegration
 
         public async Task<ApiResult<List<RoleVm>>> GetAllRoles()
         {
-            var data = await GetAsync<ApiResult<List<RoleVm>>>($"/api/roles");
-            return data;
+            return await GetAsync<ApiResult<List<RoleVm>>>($"/api/roles");
         }
     }
 }

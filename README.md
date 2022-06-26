@@ -92,16 +92,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 // Note
 
 //---------------------------------------------------------------------------------//
@@ -158,5 +148,47 @@ TRACE: thực hiện một bài test loop – back theo đường dẫn đến r
 
 
 
+#API
+- Trong ApiIntegration:
+    -- Phương thức GET nên trả về kiểu dữ liệu là "ApiSuccessResult <result>.ResultObj" khi thành công
+    -- Các phương thức còn lại nên trả về đối tượng "ApiSuccessResult<result>" khi thành công
 
+
+- Trong BackEndApi
+    -- Phương thức GET nên ktra dữ liệu đầu ra
+    -- Các phương thức còn lại nên ktra cả dữ liệu đầu vào và ra
+
+- Trong Application
+    -- Các phương thức PUT,DEL,POST nên có <result>.Message cho cả trường hợp thành công và lỗi
+
+
+- Trong Service
+    -- Nếu lấy thông tin của đối tượng trong nhiều bảng dữ liệu dùng cấu trúc:
+        #--------------------------------------
+            var data= from p in _context.Products
+                    join pt in _context.ProductTranslations on p.ProductId equals pt.ProductId                        
+                    join pi in _context.ProductImages on p.ProductId equals pi.ProductId into ppi
+                    from pi in ppi.DefaultIfEmpty()
+                    where pt.LanguageId == languageId && pi.IsDefault == true
+                    select new { p, pt, pi };     
+        
+
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new ProductVm()
+                {
+                    ProductId = x.p.ProductId,
+                    ...
+                    DefaultImage = new ProductImageVm()
+                    {
+                        ImagePath = x.pi.ImagePath,
+                       ...
+                    }
+                }).ToListAsync();
+        #--------------------------------------
+
+    -- Nếu lấy thông tin của đối tượng trong 1 bảng dữ liệu dùng cấu trúc:
+        #--------------------------------------
+            var images = await _context.ProductImages.Where(x => x.ProductId == productId && x.IsDefault == false).ToListAsync();
+    
 

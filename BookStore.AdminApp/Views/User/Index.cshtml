@@ -66,6 +66,7 @@
                         <th>User Name</th>
                         <th>Email</th>
                         <th>Dob</th>
+                        <th>Role</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -94,8 +95,17 @@
                             @Html.DisplayFor(modelItem => item.Dob)
                         </td>
                         <td>
+                            @Html.DisplayFor(modelItem => item.Roles)
+                            @*@foreach(var role in item.Roles)
+                            {      
+                                <input class="form-check-input" value="true" /> 
+                                <label  class="control-label">@role.Name</label>
+                                
+                            }*@
+                        </td>
+                        <td>
                             @Html.ActionLink("EditUser", "EditUser", new {  id=item.UserId }) |
-                            @Html.ActionLink("UserDetails", "UserDetails", new { id=item.UserId }) |
+                            @Html.ActionLink("RoleAssign", "RoleAssign", new { id=item.UserId }) |
                             @Html.ActionLink("DeleteUser", "DeleteUser", new {  id=item.UserId  })
                         </td>
                     </tr>

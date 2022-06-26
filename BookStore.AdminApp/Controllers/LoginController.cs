@@ -38,9 +38,10 @@ namespace BookStore.AdminApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(LoginRequest request)
         {
-            //Ktra dữ liệu vào
             if (!ModelState.IsValid)
-                return View(ModelState);
+            {
+                return View();
+            }
 
             //Xác nhận thông tin đăng nhập và ktra
             var result = await _userApiClient.Authenticate(request);

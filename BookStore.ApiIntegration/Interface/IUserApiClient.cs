@@ -13,11 +13,11 @@ namespace BookStore.ApiIntegration.Interface
 
         Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUsersPagingRequest request);
 
-        Task<ApiResult<bool>> EditUser(Guid userId, EditUserRequest request);
+        Task<ApiResult<bool>> EditUser(EditUserRequest request);
 
         Task<ApiResult<bool>> DeleteUser(Guid userId);
 
-        Task<ApiResult<bool>> RoleAssign(Guid userId, RoleAssignRequest request);
+        Task<ApiResult<bool>> RoleAssign(RoleAssignRequest request);
 
         #endregion Admin App
 
