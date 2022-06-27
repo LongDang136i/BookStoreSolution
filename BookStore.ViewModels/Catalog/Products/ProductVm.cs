@@ -24,7 +24,7 @@ namespace BookStore.ViewModels.Catalog.Products
         public string SeoTitle { set; get; }
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
-        public List<CategoryVm> Categories { set; get; } = new List<CategoryVm>();
+        public CategoryVm Categories { set; get; }
         public CategoryAssignRequest CategoryAssign { get; set; } = new CategoryAssignRequest();
         public ProductImageVm ShowDefaultImage { set; get; } = new ProductImageVm();
         public List<ProductImageVm> ShowProductImages { get; set; } = new List<ProductImageVm>();

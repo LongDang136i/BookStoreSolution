@@ -37,9 +37,9 @@ namespace BookStore.ApiIntegration
 
         #region Admin App
 
-        public async Task<ApiResult<PagedResult<ProductListPagingVm>>> GetProductsPaging(GetProductsPagingRequest request)
+        public async Task<ApiResult<PagedResult<ProductInfoVm>>> GetProductsPaging(GetProductsPagingRequest request)
         {
-            var data = await GetAsync<ApiResult<PagedResult<ProductListPagingVm>>>($"/api/products/paging?" +
+            var data = await GetAsync<ApiResult<PagedResult<ProductInfoVm>>>($"/api/products/paging?" +
                 $"pageIndex={request.PageIndex}" +
                 $"&pageSize={request.PageSize}" +
                 $"&keyword={request.Keyword}" +
@@ -191,9 +191,9 @@ namespace BookStore.ApiIntegration
 
         #region Both Admin & Web App
 
-        public async Task<ApiResult<ProductDetailVm>> GetProductById(string languageId, int productId)
+        public async Task<ApiResult<ProductInfoVm>> GetProductById(string languageId, int productId)
         {
-            var data = await GetAsync<ApiResult<ProductDetailVm>>($"/api/products/{productId}/{languageId}");
+            var data = await GetAsync<ApiResult<ProductInfoVm>>($"/api/products/{productId}/{languageId}");
 
             return data;
         }
@@ -209,16 +209,20 @@ namespace BookStore.ApiIntegration
 
         //---------------------------------------------------------------------------------//
 
-        //public async Task<List<ProductVm>> GetFeaturedProducts(string languageId, int take)
-        //{
-        //    var data = await GetListAsync<ProductVm>($"/api/products/featured/{languageId}/{take}");
-        //    return data;
-        //}
+        #region Web App
 
-        //public async Task<List<ProductVm>> GetLatestProducts(string languageId, int take)
-        //{
-        //    var data = await GetListAsync<ProductVm>($"/api/products/latest/{languageId}/{take}");
-        //    return data;
-        //}
+        public async Task<ApiResult<List<ProductInfoVm>>> GetFeaturedProducts(string languageId, int take)
+        {
+            var data = await GetAsync<ApiResult<List<ProductInfoVm>>>($"/api/products/featured/{languageId}/{take}");
+            return data;
+        }
+
+        public async Task<ApiResult<List<ProductInfoVm>>> GetLatestProducts(string languageId, int take)
+        {
+            var data = await GetAsync<ApiResult<List<ProductInfoVm>>>($"/api/products/latest/{languageId}/{take}");
+            return data;
+        }
+
+        #endregion Web App
     }
 }

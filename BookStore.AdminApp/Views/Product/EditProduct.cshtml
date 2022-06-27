@@ -112,9 +112,8 @@
             <div class="form-group">
                 <label class="control-label">List Product Image</label>
                 @foreach(var img in Model.ShowProductImages)
-                {
-                    
-                    <img src="@(Configuration["BaseAddress"]+img)" alt="Name" style="width:80px;">
+                {                    
+                    <img src="@(Configuration["BaseAddress"]+img)" style="width:80px;">
                 }
             </div>
             <div class="form-group">

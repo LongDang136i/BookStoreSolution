@@ -24,7 +24,6 @@ namespace BookStore.BackEndApi.Controllers
         #region Admin App
 
         [HttpGet("paging")]
-        [Authorize]
         public async Task<IActionResult> GetProductsPaging([FromQuery] GetProductsPagingRequest request)
         {
             var products = await _productService.GetProductsPaging(request);
@@ -145,32 +144,6 @@ namespace BookStore.BackEndApi.Controllers
                 return BadRequest(result);
             }
             return Ok(result);
-        }
-
-        [HttpGet("productimages/{productId}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetProductImageByProductId(int productId)
-        {
-            //Lấy ảnh theo imageId
-            var result = await _productService.GetProductImageByProductId(productId);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
-
-        [HttpGet("{productId}/images/{imageId}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetProductImageById(int productId, int imageId)
-        {
-            //Lấy ảnh theo imageId
-            var image = await _productService.GetProductImageById(imageId);
-            if (image == null)
-            {
-                return BadRequest();
-            }
-            return Ok(image);
         }
 
         #endregion Both Admin & Web App
