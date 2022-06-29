@@ -4,6 +4,7 @@ using BookStore.ViewModels.System.Users.Validators;
 using BookStore.WebApp.LocalizationResources;
 using FluentValidation.AspNetCore;
 using LazZiya.ExpressLocalization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,11 +34,11 @@ namespace BookStore.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
-            // services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
-            // {
-            //     option.LoginPath = "/Account/Login";
-            //     option.AccessDeniedPath = "/Account/Forbiden/";
-            // });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+            {
+                option.LoginPath = "/Account/Login";
+                option.AccessDeniedPath = "/Account/Forbiden/";
+            });
             var cultures = new[]
            {
                  new CultureInfo("en"),
@@ -121,6 +122,38 @@ namespace BookStore.WebApp
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "Cart En",
+                    pattern: "{culture}/cart", new
+                    {
+                        controller = "Cart",
+                        action = "Index"
+                    });
+
+                endpoints.MapControllerRoute(
+                    name: "Cart Vn",
+                    pattern: "{culture}/gio-hang", new
+                    {
+                        controller = "Cart",
+                        action = "Index"
+                    });
+
+                endpoints.MapControllerRoute(
+                    name: "Checkout Vn",
+                    pattern: "{culture}/thanh-toan", new
+                    {
+                        controller = "Cart",
+                        action = "Checkout"
+                    });
+
+                endpoints.MapControllerRoute(
+                    name: "Checkout En",
+                    pattern: "{culture}/checkout", new
+                    {
+                        controller = "Cart",
+                        action = "Checkout"
+                    });
+
                 endpoints.MapControllerRoute(
                     name: "Product By Category En",
                     pattern: "{culture}/category/{id}", new

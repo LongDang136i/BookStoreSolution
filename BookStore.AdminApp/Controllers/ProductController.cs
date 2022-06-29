@@ -27,7 +27,7 @@ namespace BookStore.AdminApp.Controllers
             _categoryApiClient = categoryApiClient;
         }
 
-        public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 15)
+        public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5)
         {
             //Lấy Token Authorize và LanguageId
             var sessions = HttpContext.Session.GetString("Token");

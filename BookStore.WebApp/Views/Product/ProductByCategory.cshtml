@@ -1,5 +1,5 @@
 ﻿@model ProductByCategoryViewModel
-
+@using BookStore.ViewModels.Common;
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
 
@@ -79,11 +79,13 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                   </div>
                }
-                  
-
                </div>
+               <div class="row" style="padding-right:20px;float:right"> 
+                  @await Component.InvokeAsync("Pager", Model.Products)   
+              </div>
+               
             </div>               
         </div>
 
@@ -188,5 +190,6 @@
           </div>
         </div>
       </div>
+       
     </section>
     <!--================End Category Product Area =================-->

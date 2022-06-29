@@ -34,15 +34,17 @@ namespace BookStore.WebApp.Controllers
             return View(result);
         }
 
-        public async Task<IActionResult> ProductByCategory(int id, string culture, int page = 1)
+        public async Task<IActionResult> ProductByCategory(int id, string culture, int pageIndex = 1)
         {
-            var products = await _productApiClient.GetProductsPaging(new GetProductsPagingRequest()
+            var request = new GetProductsPagingRequest()
             {
                 CategoryId = id,
-                PageIndex = page,
+                PageIndex = pageIndex,
                 LanguageId = culture,
                 PageSize = SystemConstants.ProductSettings.NumberOfProductPerPage,
-            });
+            };
+            var products = await _productApiClient.GetProductsPaging(request);
+
             var category = await _categoryApiClient.GetCategoryById(culture, id);
             var result = new ProductByCategoryViewModel()
             {

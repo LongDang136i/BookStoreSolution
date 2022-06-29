@@ -46,7 +46,7 @@
           </div>
           <div class="col-lg-5">
             <div class="float-right">
-              <ul class="right_side">
+              <ul class="right_side" style="width:450px;">
                  <li>
                   <language-nav language-label="NativeName"
                       cookie-handler-url="@(Url.Action("SetCultureCookie", "Home", new { area= "", cltr="{0}", returnUrl="{1}" }))">
@@ -63,10 +63,20 @@
                     track order
                   </a>
                 </li>
-                <li>
-                  <a href="contact.html">
-                    Contact Us
-                  </a>
+                <li >
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form action="/@culture/User/Logout" method="post">
+                            <button type="submit" style="border:none;">Logout</button>                            
+                        </form>
+                    }
+                    else
+                    {
+                        <a href="/@culture/User/Login" style="padding-right:0">
+                            Login
+                        </a>
+                    }                            
+                  
                 </li>
               </ul>
             </div>
@@ -153,6 +163,13 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <script src="/themes/js/jquery.js" type="text/javascript"></script>
+    <script src="/themes/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/themes/js/google-code-prettify/prettify.js"></script>
+
+    <script src="/themes/js/bootshop.js"></script>
+    <script src="/themes/js/jquery.lightbox-0.5.js"></script>
+
   <script src="/js/jquery-3.2.1.min.js"></script>
   <script src="/js/popper.js"></script>
   <script src="/js/bootstrap.min.js"></script>
@@ -167,6 +184,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   <script src="/vendors/counter-up/jquery.counterup.js"></script>
   <script src="/js/mail-script.js"></script>
   <script src="/js/theme.js"></script>
+  <script src="/js/site.js"></script>
+  <script>
+        var site = new SiteController();
+        site.initialize();
+    </script>
+    @RenderSection("scripts", required: false)
 </body>
 
 </html>

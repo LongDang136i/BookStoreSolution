@@ -121,6 +121,9 @@
     <value>Thêm vào giỏ</value>
     <comment>/Home/Index</comment>
   </data>
+  <data name="cart" xml:space="preserve">
+    <value>gio-hang</value>
+  </data>
   <data name="categoryUrl" xml:space="preserve">
     <value>danh-muc</value>
     <comment>Layouts</comment>

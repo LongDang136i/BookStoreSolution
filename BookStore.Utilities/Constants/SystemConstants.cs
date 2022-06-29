@@ -7,6 +7,7 @@ namespace BookStore.Utilities.Constants
     public class SystemConstants
     {
         public const string MainConnectionString = "BookStoreSolutionDb";
+        public const string CartSession = "CartSession";
 
         public class AppSettings
         {
@@ -19,7 +20,7 @@ namespace BookStore.Utilities.Constants
 
         public class ProductSettings
         {
-            public const int NumberOfProductPerPage = 15;
+            public const int NumberOfProductPerPage = 6;
             public const int NumberOfFeaturedProducts = 8;
             public const int NumberOfLatestProducts = 8;
             public const string ErrorImage = "/user-content/error-image.jpg";

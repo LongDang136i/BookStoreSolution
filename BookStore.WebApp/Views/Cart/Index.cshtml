@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+@section scripts{
+    <script src="/js/cart.js"></script>
+    <script>
+        var cartController = new CartController();
+        cartController.initialize();
+    </script>
+}
+
+    <!--================Home Banner Area =================-->
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div
+            class="banner_content d-md-flex justify-content-between align-items-center"
+          >
+            <div class="mb-3 mb-md-0">
+              <h2>Cart</h2>
+              <p>Very us move be blessed multiply night</p>
+            </div>
+            <div class="page_link">
+              <a href="index.html">Home</a>
+              <a href="cart.html">Cart</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+
+    <!--================Cart Area =================-->
+    <section class="cart_area">
+      <div class="container">
+        <div class="cart_inner">
+          <div class="table-responsive">
+            <table class="table" id="tbl_cart" style="border-bottom:inset;">
+              <thead>
+                <tr>                    
+                  <th style="text-align: center; font-size:25px;" scope="col">Product</th>
+                  <th style="text-align: center; font-size:25px;"  scope="col">Price</th>
+                  <th style="text-align: center; font-size:25px;" scope="col">Quantity</th>
+                  <th style="text-align: center; font-size:25px;" scope="col">Total</th>
+                </tr>
+              </thead>
+             <tbody id="cart_body">    
+                  
+              </tbody>
+              <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align:right; padding-right:50px;font-size:22px;">TOTAL =</td>
+                    <td class="label label-important" style="display:block;text-align: center;"> <span id="lbl_total"style="font-size:25px; color:#71cd14"></span> </td>
+                    
+                </tr>
+
+            </tfoot>
+            </table>
+          </div>
+           <a style="float:left; " href="/" class="btn btn-primary"> Continue Shopping </a>
+           <a style="float:right;" href="/@culture/Cart/Checkout" class="btn btn-success">Checkout</a>
+        </div>
+      </div>
+      </section>
+    <!--================End Cart Area =================-->
+
+
