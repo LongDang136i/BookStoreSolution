@@ -102,6 +102,19 @@ namespace BookStore.BackEndApi.Controllers
 
         #region Web App
 
+        [HttpGet("collection/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCollectionProducts(string languageId, int take)
+        {
+            //Lấy ds sản phẩm mới nhất
+            var products = await _productService.GetCollectionProducts(languageId, take);
+            if (products == null)
+            {
+                return BadRequest();
+            }
+            return Ok(products);
+        }
+
         [HttpGet("featured/{languageId}/{take}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetFeaturedProducts(string languageId, int take)

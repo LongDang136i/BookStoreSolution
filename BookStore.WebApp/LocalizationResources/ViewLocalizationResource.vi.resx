@@ -156,6 +156,9 @@
     <value>san-pham</value>
     <comment>/Home/Index</comment>
   </data>
+  <data name="search" xml:space="preserve">
+    <value>tim-kiem</value>
+  </data>
   <data name="Specials Offer" xml:space="preserve">
     <value>Khuyến mãi</value>
     <comment>Layouts</comment>

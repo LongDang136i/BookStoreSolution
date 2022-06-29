@@ -8,9 +8,8 @@ namespace BookStore.WebApp.Models
     public class ProductByCategoryViewModel
     {
         public CategoryVm Category { get; set; }
-
         public PagedResult<ProductInfoVm> Products { get; set; }
-
         public List<ProductInfoVm> RelatedProducts { get; set; }
+        public List<CategoryVm> ListCategory { get; set; }
     }
 }

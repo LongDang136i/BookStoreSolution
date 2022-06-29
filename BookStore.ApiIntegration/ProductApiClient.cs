@@ -44,7 +44,8 @@ namespace BookStore.ApiIntegration
                 $"&pageSize={request.PageSize}" +
                 $"&keyword={request.Keyword}" +
                 $"&languageId={request.LanguageId}" +
-                $"&categoryId={request.CategoryId}");
+                $"&categoryId={request.CategoryId}" +
+                $"&sortBy={request.SortBy}");
 
             return data;
         }
@@ -211,6 +212,11 @@ namespace BookStore.ApiIntegration
 
         #region Web App
 
+        public async Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take)
+        {
+            var data = await GetAsync<ApiResult<List<ProductInfoVm>>>($"/api/products/collection/{languageId}/{take}");
+            return data;
+        }
         public async Task<ApiResult<List<ProductInfoVm>>> GetFeaturedProducts(string languageId, int take)
         {
             var data = await GetAsync<ApiResult<List<ProductInfoVm>>>($"/api/products/featured/{languageId}/{take}");

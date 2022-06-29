@@ -8,5 +8,7 @@ namespace BookStore.WebApp.Models
         public List<ProductInfoVm> FeaturedProducts { get; set; }
 
         public List<ProductInfoVm> LatestProducts { get; set; }
+
+        public List<ProductInfoVm> CollectionProducts { get; set; }
     }
 }

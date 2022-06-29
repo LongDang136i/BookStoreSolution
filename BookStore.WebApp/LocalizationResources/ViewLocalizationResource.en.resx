@@ -156,6 +156,9 @@
     <value>product</value>
     <comment>/Home/Index</comment>
   </data>
+  <data name="search" xml:space="preserve">
+    <value>search</value>
+  </data>
   <data name="Specials Offer" xml:space="preserve">
     <value>Specials Offer</value>
     <comment>Layouts</comment>

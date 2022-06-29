@@ -5,24 +5,19 @@
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@section Scripts{
+    <script>
+        setTimeout(function(){
+            $('#msgAlert').fadeOut('slow');
+        },2000);        
+    </script>
+}
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @{
     var culture = CultureInfo.CurrentCulture.Name;
 }
-
-<h3>
-    SHOPPING CART [ <small>@Model.CartItems.Count Item(s) </small>]
-</h3>
-
-
-@if (TempData["SuccessMsg"] != null)
-{
-    <span class="alert alert-success">@TempData["SuccessMsg"]</span>
-}
-else
-{
-    
-    <!--================Home Banner Area =================-->
+  <!--================Home Banner Area =================-->
     <section class="banner_area">
       <div class="banner_inner d-flex align-items-center">
         <div class="container">
@@ -30,18 +25,45 @@ else
             class="banner_content d-md-flex justify-content-between align-items-center"
           >
             <div class="mb-3 mb-md-0">
-              <h2>Cart</h2>
-              <p>Very us move be blessed multiply night</p>
+              <h2>Checkout</h2>
+              <p>Confirm oder and check out</p>
             </div>
-            <div class="page_link">
-              <a href="index.html">Home</a>
-              <a href="cart.html">Cart</a>
-            </div>
+           
           </div>
         </div>
       </div>
     </section>
     <!--================End Home Banner Area =================-->
+
+@if (TempData["SuccessMsg"] != null)
+{
+    
+    <div class="cart_area"  style="padding:30px 0px">
+
+      <div class="container">
+          <span id="msgAlert" class="alert alert-success">@TempData["SuccessMsg"]</span>
+          <br/>
+          <hr/>
+        <div class="cart_inner">
+          <div class="table-responsive">
+            <table class="table" id="tbl_cart" style="border-bottom:inset;">
+            <thead>
+                <tr>                    
+                  <th style="text-align: center; font-size:25px;" scope="col">Product</th>
+                  <th style="text-align: center; font-size:25px;"  scope="col">Price</th>
+                  <th style="text-align: center; font-size:25px;" scope="col">Quantity</th>
+                  <th style="text-align: center; font-size:25px;" scope="col">Total</th>
+                </tr>
+              </thead>     
+            </table>
+          </div>
+          </div>
+          </div>
+          </div>
+}
+else
+{   
+  
 
     <!--================Cart Area =================-->
     <div class="cart_area">
@@ -133,12 +155,6 @@ else
             </div>
           </div>
           </div>
-      
 
-   
-
-    
-                
-    
-    <a href="/" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>
 }
+<a href="/" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>

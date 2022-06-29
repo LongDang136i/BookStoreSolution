@@ -69,7 +69,7 @@ namespace BookStore.Application.Catalog.Products
                         SeoDescription = request.SeoDescription,
                         SeoAlias = request.SeoAlias,
                         SeoTitle = request.SeoTitle,
-                        LanguageId = request.LanguageId
+                        LanguageId = request.LanguageId,
                     });
                 }
                 // Nếu không tương ứng: tạo thông tin N/A cho đối tượng ProductTranslation cho sản phẩm đang tạo với ngôn ngữ còn lại.
@@ -95,7 +95,8 @@ namespace BookStore.Application.Catalog.Products
                 Stock = request.Stock,
                 ViewCount = 0,
                 DateCreated = DateTime.Now,
-                ProductTranslations = translations
+                ProductTranslations = translations,
+                IsFeatured = request.IsFeatured,
             };
 
             //Kiểm tra xem có ảnh sản phẩm trong request không,nếu có tạo đối tượng để lưu thông tin ảnh sản phẩm
@@ -281,6 +282,42 @@ namespace BookStore.Application.Catalog.Products
 
         #region Web App
 
+        public async Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take)
+        {
+            var query = from p in _context.Products
+                        join pt in _context.ProductTranslations on p.ProductId equals pt.ProductId
+                        join pic in _context.ProductInCategories on p.ProductId equals pic.ProductId into ppic
+                        from pic in ppic.DefaultIfEmpty()
+                        join c in _context.Categories on pic.CategoryId equals c.CategoryId into picc
+                        from c in picc.DefaultIfEmpty()
+                        join pi in _context.ProductImages on p.ProductId equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
+                        where pt.LanguageId == languageId && pi.IsDefault == true
+                        select new { p, pt, pic, pi };
+
+            var data = await query.OrderByDescending(x => x.p.DateCreated).Where(x => x.pt.Name.Contains("Mahouka")).Take(take)
+                .Select(x => new ProductInfoVm()
+                {
+                    ProductId = x.p.ProductId,
+                    Name = x.pt.Name,
+                    Description = x.pt.Description,
+                    LanguageId = x.pt.LanguageId,
+                    Price = x.p.Price,
+                    OriginalPrice = x.p.OriginalPrice,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ShowDefaultImage = x.pi.ImagePath,
+                }).ToListAsync();
+
+            //Thực thi
+            if (data != null)
+            {
+                return new ApiSuccessResult<List<ProductInfoVm>>(data);
+            }
+            return new ApiErrorResult<List<ProductInfoVm>>("Problem when get product info!");
+        }
+
         public async Task<ApiResult<List<ProductInfoVm>>> GetFeaturedProducts(string languageId, int take)
         {
             //1. Lấy sản phẩm hot
@@ -398,8 +435,7 @@ namespace BookStore.Application.Catalog.Products
             int totalRow = await query.CountAsync();
 
             //Tạo data cho từng trang, lấy ra danh sách bản ghi nhất định
-            var data = await query.OrderBy(x => x.p.Price).Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
+            var data = await query.OrderBy(x => x.pt.Name)
                 .Select(x => new ProductInfoVm()
                 {
                     ProductId = x.p.ProductId,
@@ -415,13 +451,43 @@ namespace BookStore.Application.Catalog.Products
                     ShowDefaultImage = x.pi.ImagePath,
                 }).ToListAsync();
 
+            var dataSorted = data;
+            if (request.SortBy != null && request.SortBy.Contains("NameDSC"))
+                dataSorted = data.OrderByDescending(x => x.Name).ToList();
+            if (request.SortBy != null && request.SortBy.Contains("PriceASC"))
+                dataSorted = data.OrderBy(x => x.Price).ToList();
+            if (request.SortBy != null && request.SortBy.Contains("PriceDSC"))
+                dataSorted = data.OrderByDescending(x => x.Price).ToList();
+
+            var result = dataSorted.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize).ToList();
+            //if (request.SortBy != null)
+            //    switch (request.SortBy)
+            //    {
+            //        case 2:
+            //            dataSorted = data.OrderByDescending(x => x.Name).ToList();
+            //            break;
+
+            //        case 3:
+            //            dataSorted = data.OrderBy(x => x.Price).ToList();
+            //            break;
+
+            //        case 4:
+            //            dataSorted = data.OrderByDescending(x => x.Price).ToList();
+            //            break;
+
+            //        default:
+            //            dataSorted = data;
+            //            break;
+            //    }
+
             //4. Tạo trang kết quả
             var pagedResult = new PagedResult<ProductInfoVm>()
             {
                 TotalRecords = totalRow,
                 PageSize = request.PageSize,
                 PageIndex = request.PageIndex,
-                Items = data
+                Items = result
             };
             return new ApiSuccessResult<PagedResult<ProductInfoVm>>(pagedResult);
         }

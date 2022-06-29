@@ -40,6 +40,8 @@ namespace BookStore.Application.Catalog.Products
 
         #region Web App
 
+        Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take);
+
         Task<ApiResult<List<ProductInfoVm>>> GetFeaturedProducts(string languageId, int take);
 
         Task<ApiResult<List<ProductInfoVm>>> GetLatestProducts(string languageId, int take);

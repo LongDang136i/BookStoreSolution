@@ -4,8 +4,8 @@
 @inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
 
 @{
-    ViewData["Title"] = Model.Category.Name + (Model.Products.PageIndex == 1 ? "" : " - " + _loc["Page"] + " " + Model.Products.PageIndex);
-    ViewData["Description"] = Model.Category.Name + (Model.Products.PageIndex == 1 ? "" : " - " + _loc["Page"] + " " + Model.Products.PageIndex);
+    //ViewData["Title"] = Model.Category.Name + (Model.Products.PageIndex == 1 ? "" : " - " + _loc["Page"] + " " + Model.Products.PageIndex);
+    //ViewData["Description"] = Model.Category.Name + (Model.Products.PageIndex == 1 ? "" : " - " + _loc["Page"] + " " + Model.Products.PageIndex);
     Layout = "~/Views/Shared/_Layout.cshtml";
     var culture = CultureInfo.CurrentCulture;
 }
@@ -16,12 +16,14 @@
         <div class="container">
           <div class="banner_content d-md-flex justify-content-between align-items-center">
             <div class="mb-3 mb-md-0">
-              <h2>@Model.Category.Name</h2>
-              <p>@Model.Category.SeoDescription</p>
+              <h2>@if(Model.Category!=null)
+                    @Model.Category.Name
+                  else if(ViewBag.Keyword!=null)
+                    @ViewBag.Keyword
+              </h2>
+              <p>@if(Model.Category!=null)@Model.Category.SeoDescription</p>
             </div>
-            <div class="page_link">
-              <a href="/">Home</a>
-            </div>
+            
           </div>
         </div>
       </div>
@@ -29,17 +31,16 @@
     <!--================End Home Banner Area =================-->
 
     <!--================Category Product Area =================-->
-    <section class="cat_product_area section_gap">
+    <section class="cat_product_area section_gap" style="padding:30px 0px">
       <div class="container">
         <div class="row flex-row-reverse">
           <div class="col-lg-9">
-            <div class="product_top_bar">
+            <div class="product_top_bar"> 
               <div class="left_dorp">
-                <select class="sorting">
-                  <option value="1">Default sorting</option>
-                  <option value="2">Default sorting 01</option>
-                  <option value="4">Default sorting 02</option>
-                </select>                
+                 <form asp-controller="Product" asp-action="ProductByCategory" method="get">
+                    <select class="sorting" onchange="this.form.submit()" name="sortBy" asp-items=@ViewBag.SortBy>
+                    </select>   
+                </form>
               </div>
             </div>
             
@@ -64,7 +65,7 @@
                         @*<a href="#">
                           <i class="ti-heart"></i>
                         </a>*@
-                        <a href="#">
+                        <a href="#"class="btn-add-cart" data-id="@item.ProductId">
                           <i class="ti-shopping-cart"></i>
                         </a>
                       </div>
@@ -93,31 +94,27 @@
             <div class="left_sidebar_area">
               <aside class="left_widgets p_filter_widgets">
                 <div class="l_w_title">
-                  <h3>Browse Categories</h3>
+                  <h3>Categories</h3>
                 </div>
                 <div class="widgets_inner">
                   <ul class="list">
-                    <li>
-                      <a href="#">Frozen Fish</a>
-                    </li>
-                    <li>
-                      <a href="#">Dried Fish</a>
-                    </li>
-                    <li>
-                      <a href="#">Fresh Fish</a>
-                    </li>
-                    <li>
-                      <a href="#">Meat Alternatives</a>
-                    </li>
-                    <li>
-                      <a href="#">Fresh Fish</a>
-                    </li>
-                    <li>
-                      <a href="#">Meat Alternatives</a>
-                    </li>
-                    <li>
-                      <a href="#">Meat</a>
-                    </li>
+                      @foreach (var item in Model.ListCategory)
+                     {
+                         if(@Model.Category!=null && item.CategoryId==@Model.Category.CategoryId)
+                         {
+                             <li class="active">
+                                <a href="/@culture/@_loc["categoryUrl"]/@item.CategoryId">@item.Name</a>
+                            </li> 
+                         }
+                         else
+                         {
+                             <li >
+                                <a href="/@culture/@_loc["categoryUrl"]/@item.CategoryId">@item.Name</a>
+                            </li> 
+                         }
+                                                
+                     }
+                    
                   </ul>
                 </div>
               </aside>
@@ -147,45 +144,6 @@
                 </div>
               </aside>
 
-              <aside class="left_widgets p_filter_widgets">
-                <div class="l_w_title">
-                  <h3>Color Filter</h3>
-                </div>
-                <div class="widgets_inner">
-                  <ul class="list">
-                    <li>
-                      <a href="#">Black</a>
-                    </li>
-                    <li>
-                      <a href="#">Black Leather</a>
-                    </li>
-                    <li class="active">
-                      <a href="#">Black with red</a>
-                    </li>
-                    <li>
-                      <a href="#">Gold</a>
-                    </li>
-                    <li>
-                      <a href="#">Spacegrey</a>
-                    </li>
-                  </ul>
-                </div>
-              </aside>
-
-              <aside class="left_widgets p_filter_widgets">
-                <div class="l_w_title">
-                  <h3>Price Filter</h3>
-                </div>
-                <div class="widgets_inner">
-                  <div class="range_item">
-                    <div id="slider-range"></div>
-                    <div class="">
-                      <label for="amount">Price : </label>
-                      <input type="text" id="amount" readonly />
-                    </div>
-                  </div>
-                </div>
-              </aside>
             </div>
           </div>
         </div>

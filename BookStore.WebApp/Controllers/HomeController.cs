@@ -43,6 +43,11 @@ namespace BookStore.WebApp.Controllers
             {
                 viewModel.LatestProducts = latestProducts.ResultObj;
             }
+            var collectionProducts = await _productApiClient.GetCollectionProducts(culture, SystemConstants.ProductSettings.NumberOfCollectionProduct);
+            if (collectionProducts.IsSuccessed)
+            {
+                viewModel.CollectionProducts = collectionProducts.ResultObj;
+            }
             return View(viewModel);
         }
 
