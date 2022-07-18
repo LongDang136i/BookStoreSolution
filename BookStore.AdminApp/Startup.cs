@@ -38,6 +38,7 @@ namespace BookStore.AdminApp
                 option.AccessDeniedPath = "/Account/Forbiden/";
             });
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddTransient<ILanguageApiClient, LanguageApiClient>();
@@ -51,8 +52,6 @@ namespace BookStore.AdminApp
             {
                 option.IdleTimeout = TimeSpan.FromMinutes(30);
             });
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             /*Add Razor Runtime Compilation*/
             IMvcBuilder builder = services.AddRazorPages();

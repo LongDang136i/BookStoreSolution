@@ -1,8 +1,10 @@
 ﻿using BookStore.Application.Catalog.Products;
 using BookStore.ViewModels.Catalog.ProductImages;
 using BookStore.ViewModels.Catalog.Products;
+using BookStore.ViewModels.Sale;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BookStore.BackEndApi.Controllers
@@ -24,7 +26,6 @@ namespace BookStore.BackEndApi.Controllers
         #region Admin App
 
         [HttpGet("paging")]
-        [Authorize]
         public async Task<IActionResult> GetProductsPaging([FromQuery] GetProductsPagingRequest request)
         {
             var products = await _productService.GetProductsPaging(request);
@@ -103,6 +104,19 @@ namespace BookStore.BackEndApi.Controllers
 
         #region Web App
 
+        [HttpGet("collection/{languageId}/{take}/{collection}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCollectionProducts(string languageId, int take, string collection)
+        {
+            //Lấy ds sản phẩm mới nhất
+            var products = await _productService.GetCollectionProducts(languageId, take, collection);
+            if (products == null)
+            {
+                return BadRequest();
+            }
+            return Ok(products);
+        }
+
         [HttpGet("featured/{languageId}/{take}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetFeaturedProducts(string languageId, int take)
@@ -147,30 +161,20 @@ namespace BookStore.BackEndApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("productimages/{productId}")]
+        [HttpPost("createOder")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetProductImageByProductId(int productId)
+        public async Task<IActionResult> CreateOrder([FromBody] CheckoutRequest request)
         {
-            //Lấy ảnh theo imageId
-            var result = await _productService.GetProductImageByProductId(productId);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _productService.CreateOrder(request);
             if (!result.IsSuccessed)
             {
-                return BadRequest(result);
+                return BadRequest(result.Message);
             }
             return Ok(result);
-        }
-
-        [HttpGet("{productId}/images/{imageId}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetProductImageById(int productId, int imageId)
-        {
-            //Lấy ảnh theo imageId
-            var image = await _productService.GetProductImageById(imageId);
-            if (image == null)
-            {
-                return BadRequest();
-            }
-            return Ok(image);
         }
 
         #endregion Both Admin & Web App

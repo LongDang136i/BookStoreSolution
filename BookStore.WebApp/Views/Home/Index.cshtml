@@ -1,0 +1,478 @@
+﻿ 
+@model HomeViewModel
+
+@using BookStore.ViewModels.Catalog.Products;
+@inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@{
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+  <!--================Home Banner Area =================-->
+  <section class="home_banner_area mb-40">
+    <div class="banner_inner d-flex ">
+      <div class="container" style="padding-top:125px;">
+        <div class="banner_content row">
+          <div class="col-lg-12">
+            <p class="sub text-uppercase">Light Novel Collection</p>
+            <h3><span>Each</span> Book <br />Each <span>Story</span></h3>
+            <h4>Lorem Lorem Lorem Lorem  </h4>
+            <a class="main_btn mt-40" href="#">View Collection</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================End Home Banner Area =================-->
+
+  <!-- Start feature Area -->
+  <section class="feature-area ">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6">
+          <div class="single-feature">
+            <a href="#" class="title">
+              <i class="flaticon-money"></i>
+              <h3>Money back gurantee</h3>
+            </a>
+            <p>Shall open divide a one</p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="single-feature">
+            <a href="#" class="title">
+              <i class="flaticon-truck"></i>
+              <h3>Free Delivery</h3>
+            </a>
+            <p>Shall open divide a one</p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="single-feature">
+            <a href="#" class="title">
+              <i class="flaticon-support"></i>
+              <h3>Alway support</h3>
+            </a>
+            <p>Shall open divide a one</p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="single-feature">
+            <a href="#" class="title">
+              <i class="flaticon-blockchain"></i>
+              <h3>Secure payment</h3>
+            </a>
+            <p>Shall open divide a one</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End feature Area -->
+
+  <!--================ Feature Product Area =================-->
+  <section class="feature_product_area ">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="main_title">
+            <h2><span>Featured product</span></h2>
+            <h3>Hottest Products of Our Store</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+      @foreach (var item in @Model.FeaturedProducts)
+     {
+         var url = $"/{culture}/{_loc["productUrl"]}/{item.ProductId}";
+         
+        <div class="col-lg-4 col-md-6">
+          <div class="single-product">
+            <div class="product-img">
+              <a href="@url"><img class="img-fluid w-100" src="@(Configuration["BaseAddress"]+item.ShowDefaultImage)" style="height:496px;" alt="@item.Name" /></a>
+              <div class="p_icon">
+                <a href="@url">
+                  <i class="ti-eye"></i>
+                </a>
+                <a href="#" class="btn-add-cart" data-id="@item.ProductId">
+                  <i class="ti-shopping-cart"></i>
+                </a>
+              </div>
+            </div>
+            <div class="product-btm">
+              <a href="@url" class="d-block">
+                <h4>@item.Name</h4>
+              </a>
+              <div class="mt-3">
+                <span class="mr-4">@item.Price.ToString("C", CultureInfo.CurrentCulture)</span>
+                <del>@item.OriginalPrice.ToString("C", CultureInfo.CurrentCulture)</del>
+              </div>
+            </div>
+          </div>
+        </div>  
+     }
+      
+           
+      </div>
+    </div>
+  </section>
+  <!--================ End Feature Product Area =================-->
+
+  <!--================ New Product Area =================-->
+
+          
+    <div id="wrapper">
+    <div class="main_title" style="height: 25px;">
+            <h2><span>Featured product</span></h2>
+            <h4>Hottest Products of Our Store</h4>
+          </div>
+   	  <div id="slider-wrap" >
+      	  <ul id="slider">
+                    @for (int i = 0;i<@Model.CollectionProducts.Count;i++)
+                  {
+          	 <li >
+                      <section class="new_product_area " >
+                <div class="container">
+                  <div class="row justify-content-center">
+
+                      
+        <div class="col-lg-12" style="height: 50px;">
+          <div class="main_title">
+            <h3>Series</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" >
+        <div class="col-lg-6">
+          <div class="new_product" style="padding: 15px 15px;">
+            
+            <div class="product-img" style="padding: 10px 10px;">
+              <a href="/@culture/@_loc["productUrl"]/@Model.CollectionProducts[i][0].ProductId"><img class="img-fluid" src="@(Configuration["BaseAddress"]+Model.CollectionProducts[i][0].ShowDefaultImage)" alt="" /></a>
+            </div>
+            <h3 style="height: 95px; padding-top:25px" class="text-uppercase">@Model.CollectionProducts[i][0].Name</h3>
+            <h4 style=" padding-top:20px">@Model.CollectionProducts[i][0].Price.ToString("C", CultureInfo.CurrentCulture)</h4>
+            <a href="#" style="font-size:25px; width:250px;" class="main_btn btn-add-cart" data-id="@Model.CollectionProducts[i][0].ProductId">Add to cart</a>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mt-5 mt-lg-0">
+          <div class="row">
+            @for (int j =1;j<@Model.CollectionProducts[i].Count;j++)
+            {
+                var url = $"/{culture}/{_loc["productUrl"]}/{Model.CollectionProducts[i][j].ProductId}";
+              <div class="col-lg-6 col-md-6">
+              <div class="single-product">
+                <div class="product-img">
+                  <a href="@url" ><img class="img-fluid w-100" src="@(Configuration["BaseAddress"]+Model.CollectionProducts[i][j].ShowDefaultImage)" style="width:255px;height:360px;" alt="Model.CollectionProducts[i].Name" /></a>
+                  <div class="p_icon" style="height:50px;" >
+                    <a href="@url" style="height:36px; vertical-align:top">
+                      <i class="ti-eye" style="height:36px;font-size:20px;position: absolute;top: -175px;left: -32px;"></i>
+                    </a>
+                    
+                    <a href="#"  class="btn-add-cart" data-id="@Model.CollectionProducts[i][j].ProductId">
+                      <i class="ti-shopping-cart" style="height:36px;font-size:20px;position: absolute;top: -175px;left: 33px;"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="product-btm">
+                   <a href="@url" class="d-block">
+                    <h4>@Model.CollectionProducts[i][j].Name</h4>
+                  </a>
+                  <div class="mt-3">
+                    <span class="mr-4">@Model.CollectionProducts[i][j].Price.ToString("C", CultureInfo.CurrentCulture)</span>
+                    <del>@Model.CollectionProducts[i][j].OriginalPrice.ToString("C", CultureInfo.CurrentCulture)</del>
+                  </div>
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+                      
+                  </div>
+                </div>
+              </section>
+              </li>
+                  }
+                            
+             
+             
+             
+             
+             
+          </ul>
+          
+           <!--controls-->
+          <div class="btns" id="next"><i class="fa fa-arrow-right"></i></div>
+          <div class="btns" id="previous"><i class="fa fa-arrow-left"></i></div>
+          @*<div id="counter"></div>*@
+          
+          <div id="pagination-wrap">
+            <ul style="position: absolute;top: 730px;z-index:1000;">
+            </ul>
+          </div>
+          <!--controls-->  
+                 
+      </div>
+  
+   </div>
+
+
+
+  <!--================ End New Product Area =================-->
+  @*<!--================ New Product Area =================-->
+  <section class="new_product_area " style="padding-top:250px;">
+    <div class="container">
+      <div class="row justify-content-center">
+
+     
+        <div class="col-lg-12">
+          <div class="main_title">
+            <h2><span>Hot Collection</span></h2>
+            <h3>Mahouka Koukou no Rettousei Series</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="new_product" style="padding: 15px 15px;">
+            
+            <div class="product-img" style="padding: 10px 10px;">
+              <a href="/@culture/@_loc["productUrl"]/@Model.CollectionProducts[0].ProductId"><img class="img-fluid" src="@(Configuration["BaseAddress"]+Model.CollectionProducts[0].ShowDefaultImage)" alt="" /></a>
+            </div>
+            <h3 style="height: 95px; padding-top:25px" class="text-uppercase">@Model.CollectionProducts[0].Name</h3>
+            <h4 style=" padding-top:20px">@Model.CollectionProducts[0].Price.ToString("C", CultureInfo.CurrentCulture)</h4>
+            <a href="#" style="font-size:25px; width:250px;" class="main_btn btn-add-cart" data-id="@Model.CollectionProducts[0].ProductId">Add to cart</a>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mt-5 mt-lg-0">
+          <div class="row">
+            @for (int i =1;i<@Model.CollectionProducts.Count;i++)
+            {
+                var url = $"/{culture}/{_loc["productUrl"]}/{Model.CollectionProducts[i].ProductId}";
+              <div class="col-lg-6 col-md-6">
+              <div class="single-product">
+                <div class="product-img">
+                  <a href="@url" ><img class="img-fluid w-100" src="@(Configuration["BaseAddress"]+Model.CollectionProducts[i].ShowDefaultImage)" style="width:255px;height:360px;" alt="Model.CollectionProducts[i].Name" /></a>
+                  <div class="p_icon">
+                    <a href="@url">
+                      <i class="ti-eye"></i>
+                    </a>
+                    <a href="#"  class="btn-add-cart" data-id="@Model.CollectionProducts[i].ProductId">
+                      <i class="ti-shopping-cart"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="product-btm">
+                   <a href="@url" class="d-block">
+                    <h4>@Model.CollectionProducts[i].Name</h4>
+                  </a>
+                  <div class="mt-3">
+                    <span class="mr-4">@Model.CollectionProducts[i].Price.ToString("C", CultureInfo.CurrentCulture)</span>
+                    <del>@Model.CollectionProducts[i].OriginalPrice.ToString("C", CultureInfo.CurrentCulture)</del>
+                  </div>
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </section>
+  <!--================ End New Product Area =================-->*@
+
+  <!--================ Inspired Product Area =================-->
+  <section class="inspired_product_area section_gap_bottom_custom" style="padding-top:150px;">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="main_title">
+            <h2><span><localize>Newest Products</localize></span></h2>
+            <h3>Our Newest Products on This Season</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        @foreach(var item in Model.LatestProducts)
+        {
+            var url = $"/{culture}/{_loc["productUrl"]}/{item.ProductId}";
+           <div class="col-lg-3 col-md-6">
+              <div class="single-product">
+                <div class="product-img">
+                  <a href="@url"><img class="img-fluid w-100" src="@(Configuration["BaseAddress"]+item.ShowDefaultImage)" alt="@item.Name" style="width:255px;height:360px;" /></a>
+                  <div class="p_icon">
+                    <a href="@url">
+                      <i class="ti-eye"></i>
+                    </a>
+                    <a href="#" class="btn-add-cart" data-id="@item.ProductId">
+                      <i class="ti-shopping-cart"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="product-btm">
+                  <a href="@url" class="d-block">
+                    <h4>@item.Name</h4>
+                  </a>
+                  <div class="mt-3">
+                    <span class="mr-4">@item.Price.ToString("C", CultureInfo.CurrentCulture)</span>
+                    <del>@item.OriginalPrice.ToString("C", CultureInfo.CurrentCulture)</del>
+                  </div>
+                </div>
+              </div>
+            </div>     
+        }      
+        </div>
+    </div>
+  </section>
+  <!--================ End Inspired Product Area =================-->
+
+
+            @*<div class="carousel-inner">
+                @{
+                    List<List<ProductInfoVm>> featuredProducts = new List<List<ProductInfoVm>>();
+                    List<ProductInfoVm> featuredPart = new List<ProductInfoVm>();
+                }
+
+                @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
+                {
+                    featuredPart.Add(Model.FeaturedProducts[index]);
+                    if (featuredPart.Count == 4 || Model.FeaturedProducts.Count < 4)
+                    {
+                        featuredProducts.Add(featuredPart);
+                        featuredPart = new List<ProductInfoVm>();
+                    }
+
+                }
+                @for (int index = 0; index < featuredProducts.Count; index++)
+                {
+                    <div class="item @(index == 0?"active":"")">
+                        <ul class="thumbnails">
+                            @foreach (var item in featuredProducts[index])
+                            {
+                                var url = $"/{culture}/{_loc["productUrl"]}/{item.ProductId}";
+                                <li class="span3">
+                                    <div class="thumbnail">
+                                        <i class="tag"></i>
+                                        <a href="@url"><img src="@(Configuration["BaseAddress"]+item.ShowDefaultImage)" style="width:255px;height:360px;"  alt="@item.Name"></a>
+                                        <div class="caption">
+                                            <h5>@item.Name</h5>
+                                            <h4><a class="btn" href="@url" localize-content>View</a> <span class="pull-right">@item.Price.ToString()</span></h4>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
+            <a class="right carousel-control" href="#featured" data-slide="next">›</a>*@
+
+  <!--================ Start Blog Area =================-->
+  @*<section class="blog-area section-gap">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="main_title">
+            <h2><span>latest blog</span></h2>
+            <p>Bring called seed first of third give itself now ment</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <div class="single-blog">
+            <div class="thumb">
+              <img class="img-fluid" src="img/b1.jpg" alt="">
+            </div>
+            <div class="short_details">
+              <div class="meta-top d-flex">
+                <a href="#">By Admin</a>
+                <a href="#"><i class="ti-comments-smiley"></i>2 Comments</a>
+              </div>
+              <a class="d-block" href="single-blog.html">
+                <h4>Ford clever bed stops your sleeping
+                  partner hogging the whole</h4>
+              </a>
+              <div class="text-wrap">
+                <p>
+                  Let one fifth i bring fly to divided face for bearing the divide unto seed winged divided light
+                  Forth.
+                </p>
+              </div>
+              <a href="#" class="blog_btn">Learn More <span class="ml-2 ti-arrow-right"></span></a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+          <div class="single-blog">
+            <div class="thumb">
+              <img class="img-fluid" src="img/b2.jpg" alt="">
+            </div>
+            <div class="short_details">
+              <div class="meta-top d-flex">
+                <a href="#">By Admin</a>
+                <a href="#"><i class="ti-comments-smiley"></i>2 Comments</a>
+              </div>
+              <a class="d-block" href="single-blog.html">
+                <h4>Ford clever bed stops your sleeping
+                  partner hogging the whole</h4>
+              </a>
+              <div class="text-wrap">
+                <p>
+                  Let one fifth i bring fly to divided face for bearing the divide unto seed winged divided light
+                  Forth.
+                </p>
+              </div>
+              <a href="#" class="blog_btn">Learn More <span class="ml-2 ti-arrow-right"></span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="single-blog">
+            <div class="thumb">
+              <img class="img-fluid" src="img/b3.jpg" alt="">
+            </div>
+            <div class="short_details">
+              <div class="meta-top d-flex">
+                <a href="#">By Admin</a>
+                <a href="#"><i class="ti-comments-smiley"></i>2 Comments</a>
+              </div>
+              <a class="d-block" href="single-blog.html">
+                <h4>Ford clever bed stops your sleeping
+                  partner hogging the whole</h4>
+              </a>
+              <div class="text-wrap">
+                <p>
+                  Let one fifth i bring fly to divided face for bearing the divide unto seed winged divided light
+                  Forth.
+                </p>
+              </div>
+              <a href="#" class="blog_btn">Learn More <span class="ml-2 ti-arrow-right"></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>*@
+  <!--================ End Blog Area =================-->

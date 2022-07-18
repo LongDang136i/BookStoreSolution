@@ -5,6 +5,7 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Solution Items", "0.Solution Items", "{B680E8D4-7D89-4FA2-9FAA-D11F5BBB4149}"
 	ProjectSection(SolutionItems) = preProject
+		Note.txt = Note.txt
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -22,13 +23,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.Application", "Bo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.Data", "BookStore.Data\BookStore.Data.csproj", "{9141C64A-9EBE-4D4A-8C22-940C533C8AB8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.WebApp", "BookStore.WebApp\BookStore.WebApp.csproj", "{2E167A8C-5A4F-4557-8006-B6C755EB4194}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.BackEndApi", "BookStore.BackEndApi\BookStore.BackEndApi.csproj", "{970D6A87-FF56-46A5-810F-F80E88278B1F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.ApiIntegration", "BookStore.ApiIntegration\BookStore.ApiIntegration.csproj", "{2C14AE7D-7A41-4264-9DCC-A23C8502086C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.AdminApp", "BookStore.AdminApp\BookStore.AdminApp.csproj", "{2B9E4196-FA62-4463-91F0-E6D24599E7B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.AdminApp", "BookStore.AdminApp\BookStore.AdminApp.csproj", "{2B9E4196-FA62-4463-91F0-E6D24599E7B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.WebApp", "BookStore.WebApp\BookStore.WebApp.csproj", "{68BF8D4C-FB78-4540-B8D9-928BE81BA5AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Image demo", "Image demo", "{48B26A40-012C-42CD-BC27-0F80A48BE003}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\GIn TonIc\Downloads\1.jpg = C:\Users\GIn TonIc\Downloads\1.jpg
+		C:\Users\GIn TonIc\Downloads\2.jpg = C:\Users\GIn TonIc\Downloads\2.jpg
+		C:\Users\GIn TonIc\Downloads\3.jpg = C:\Users\GIn TonIc\Downloads\3.jpg
+		C:\Users\GIn TonIc\Downloads\4.jpg = C:\Users\GIn TonIc\Downloads\4.jpg
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +61,6 @@ Global
 		{9141C64A-9EBE-4D4A-8C22-940C533C8AB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9141C64A-9EBE-4D4A-8C22-940C533C8AB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9141C64A-9EBE-4D4A-8C22-940C533C8AB8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E167A8C-5A4F-4557-8006-B6C755EB4194}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E167A8C-5A4F-4557-8006-B6C755EB4194}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E167A8C-5A4F-4557-8006-B6C755EB4194}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E167A8C-5A4F-4557-8006-B6C755EB4194}.Release|Any CPU.Build.0 = Release|Any CPU
 		{970D6A87-FF56-46A5-810F-F80E88278B1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{970D6A87-FF56-46A5-810F-F80E88278B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{970D6A87-FF56-46A5-810F-F80E88278B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -68,6 +73,10 @@ Global
 		{2B9E4196-FA62-4463-91F0-E6D24599E7B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B9E4196-FA62-4463-91F0-E6D24599E7B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B9E4196-FA62-4463-91F0-E6D24599E7B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68BF8D4C-FB78-4540-B8D9-928BE81BA5AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BF8D4C-FB78-4540-B8D9-928BE81BA5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68BF8D4C-FB78-4540-B8D9-928BE81BA5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68BF8D4C-FB78-4540-B8D9-928BE81BA5AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,10 +86,11 @@ Global
 		{F5EA2D2F-11B0-49E9-B402-C2B04F8E29FA} = {1C22744D-ABA4-4EB4-AF48-430CEF5F3EE9}
 		{DABF97E9-EBB0-4F42-9B2B-E5CD496775D2} = {EC110076-2EF0-4BFA-A20A-2C518A11FB19}
 		{9141C64A-9EBE-4D4A-8C22-940C533C8AB8} = {EC110076-2EF0-4BFA-A20A-2C518A11FB19}
-		{2E167A8C-5A4F-4557-8006-B6C755EB4194} = {F5720EDA-FC99-434E-A2FC-F3747514BB7D}
 		{970D6A87-FF56-46A5-810F-F80E88278B1F} = {F5720EDA-FC99-434E-A2FC-F3747514BB7D}
 		{2C14AE7D-7A41-4264-9DCC-A23C8502086C} = {F5720EDA-FC99-434E-A2FC-F3747514BB7D}
 		{2B9E4196-FA62-4463-91F0-E6D24599E7B6} = {F5720EDA-FC99-434E-A2FC-F3747514BB7D}
+		{68BF8D4C-FB78-4540-B8D9-928BE81BA5AF} = {F5720EDA-FC99-434E-A2FC-F3747514BB7D}
+		{48B26A40-012C-42CD-BC27-0F80A48BE003} = {B680E8D4-7D89-4FA2-9FAA-D11F5BBB4149}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DCE7B9EA-C850-4785-9E61-D59F618066BE}

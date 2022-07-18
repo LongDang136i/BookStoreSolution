@@ -61,6 +61,7 @@ namespace BookStore.Application.Catalog.Categories
                     SeoTitle = x.ct.SeoTitle,
                     LanguageId = x.ct.LanguageId,
                     SeoAlias = x.ct.SeoAlias,
+                    
                 }).ToListAsync();
 
             //4. Tạo trang kết quả
@@ -196,6 +197,7 @@ namespace BookStore.Application.Catalog.Categories
                 CategoryId = x.c.CategoryId,
                 Name = x.ct.Name,
                 ParentId = x.c.ParentId,
+                SeoAlias=x.ct.SeoAlias,
             }).ToListAsync();
 
             //Ktra kq

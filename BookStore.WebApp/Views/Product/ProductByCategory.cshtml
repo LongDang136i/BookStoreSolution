@@ -1,0 +1,147 @@
+﻿@model ProductByCategoryViewModel
+@using BookStore.ViewModels.Common;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
+
+@{
+    //ViewData["Title"] = Model.Category.Name + (Model.Products.PageIndex == 1 ? "" : " - " + _loc["Page"] + " " + Model.Products.PageIndex);
+    //ViewData["Description"] = Model.Category.Name + (Model.Products.PageIndex == 1 ? "" : " - " + _loc["Page"] + " " + Model.Products.PageIndex);
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var culture = CultureInfo.CurrentCulture;
+}
+
+    <!--================Home Banner Area =================-->
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div class="banner_content d-md-flex justify-content-between align-items-center">
+            <div class="mb-3 mb-md-0">
+              <h2>@if(Model.Category!=null)
+                    @Model.Category.Name
+                  else if(ViewBag.Keyword!=null)
+                    @ViewBag.Keyword
+              </h2>
+              <p>@if(Model.Category!=null)@Model.Category.SeoDescription</p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+
+    <!--================Category Product Area =================-->
+    <section class="cat_product_area section_gap" style="padding:30px 0px">
+      <div class="container">
+        <div class="row flex-row-reverse">
+          <div class="col-lg-9">
+            <div class="product_top_bar"> 
+              <div class="left_dorp">
+                 <form asp-controller="Product" asp-action="ProductByCategory" method="get">
+                    <select class="sorting" onchange="this.form.submit()" name="sortBy" asp-items=@ViewBag.SortBy>
+                    </select>   
+                </form>
+              </div>
+            </div>
+            
+            <div class="latest_product_inner">
+              <div class="row">
+                @for (int i=0;i< Model.Products.Items.Count;i++)
+               {
+                   var item = Model.Products.Items[i];
+                   var url = $"/{culture}/{_loc["productUrl"]}/{item.ProductId}";
+                   <div class="col-lg-4 col-md-6">
+                   <div class="single-product">
+                    <div class="product-img">
+                      <a href="@url"><img
+                        class="card-img" style="width:255px;height:360px;"
+                        src="@(Configuration["BaseAddress"] + @item.ShowDefaultImage)"
+                        alt=""
+                      /></a>
+                      <div class="p_icon">
+                        <a href="@url">
+                          <i class="ti-eye"></i>
+                        </a>
+                        @*<a href="#">
+                          <i class="ti-heart"></i>
+                        </a>*@
+                        <a href="#"class="btn-add-cart" data-id="@item.ProductId">
+                          <i class="ti-shopping-cart"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="product-btm">
+                      <a href="@url" class="d-block">
+                        <h4>@item.Name</h4>
+                      </a>
+                      <div class="mt-3" style="line-height:18px;">
+                        <span class="mr-4">@item.Price.ToString("C",CultureInfo.CurrentCulture)</span>
+                        <del>@item.OriginalPrice.ToString("C",CultureInfo.CurrentCulture)</del>
+                      </div>
+                    </div>
+                  </div>
+                   </div>
+               }
+               </div>
+               <div class="row" style="padding-right:20px;float:right"> 
+                  @await Component.InvokeAsync("Pager", Model.Products)   
+              </div>
+               
+            </div>               
+        </div>
+
+          <div class="col-lg-3">
+            <div class="left_sidebar_area">
+              <aside class="left_widgets p_filter_widgets">
+                <div class="l_w_title">
+                  <h3>Categories</h3>
+                </div>
+                <div class="widgets_inner">
+                  <ul class="list">
+                      @foreach (var item in Model.ListCategory)
+                     {
+                         if(@Model.Category!=null && item.CategoryId==@Model.Category.CategoryId)
+                         {
+                             <li class="active">
+                                <a href="/@culture/@_loc["categoryUrl"]/@item.CategoryId">@item.Name</a>
+                            </li> 
+                         }
+                         else
+                         {
+                             <li >
+                                <a href="/@culture/@_loc["categoryUrl"]/@item.CategoryId">@item.Name</a>
+                            </li> 
+                         }
+                                                
+                     }
+                    
+                  </ul>
+                </div>
+              </aside>
+
+              <aside class="left_widgets p_filter_widgets">
+                <div class="l_w_title">
+                  <h3>Brand</h3>
+                </div>
+                <div class="widgets_inner">
+                  <ul class="list">
+                    <li>
+                      <a href="#">Yen Press</a>
+                    </li>
+                    <li>
+                      <a href="#">Seven Sea</a>
+                    </li>
+                    <li class="">
+                      <a href="#">JNovel</a>
+                    </li>
+                  </ul>
+                </div>
+              </aside>
+
+            </div>
+          </div>
+        </div>
+      </div>
+       
+    </section>
+    <!--================End Category Product Area =================-->

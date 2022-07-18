@@ -1,6 +1,7 @@
 ﻿using BookStore.ViewModels.Catalog.ProductImages;
 using BookStore.ViewModels.Catalog.Products;
 using BookStore.ViewModels.Common;
+using BookStore.ViewModels.Sale;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,7 +9,11 @@ namespace BookStore.ApiIntegration.Interface
 {
     public interface IProductApiClient
     {
-        Task<ApiResult<PagedResult<ProductListPagingVm>>> GetProductsPaging(GetProductsPagingRequest request);
+        //---------------------------------------------------------------------------------//
+
+        #region Admin App
+
+        Task<ApiResult<PagedResult<ProductInfoVm>>> GetProductsPaging(GetProductsPagingRequest request);
 
         Task<ApiResult<int>> CreateProduct(CreateProductRequest request);
 
@@ -16,14 +21,30 @@ namespace BookStore.ApiIntegration.Interface
 
         Task<ApiResult<bool>> DeleteProduct(int productId);
 
-        //Task<ApiResult<bool>> CategoryAssign(int productId, CategoryAssignRequest request);
+        #endregion Admin App
 
-        Task<ApiResult<ProductDetailVm>> GetProductById(string languageId, int productId);
+        //---------------------------------------------------------------------------------//
 
-        //Task<List<ProductVm>> GetFeaturedProducts(string languageId, int take);
+        #region Both Admin & Web App
 
-        //Task<List<ProductVm>> GetLatestProducts(string languageId, int take);
+        Task<ApiResult<ProductInfoVm>> GetProductById(string languageId, int productId);
 
         Task<ApiResult<List<ProductImageVm>>> GetProductImageByProductId(int productId);
+
+        #endregion Both Admin & Web App
+
+        //---------------------------------------------------------------------------------//
+
+        #region Web App
+
+        Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take, string collections);
+
+        Task<ApiResult<List<ProductInfoVm>>> GetFeaturedProducts(string languageId, int take);
+
+        Task<ApiResult<List<ProductInfoVm>>> GetLatestProducts(string languageId, int take);
+
+        Task<ApiResult<int>> CreateOrder(CheckoutRequest request);
+
+        #endregion Web App
     }
 }

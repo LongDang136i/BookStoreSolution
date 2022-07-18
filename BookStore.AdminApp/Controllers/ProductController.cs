@@ -131,13 +131,11 @@ namespace BookStore.AdminApp.Controllers
                 });
             }
             if (product.ResultObj.Categories != null)
-                foreach (var catOfProduct in product.ResultObj.Categories)
+
+                foreach (var cat in categoryAssignRequest.Categories)
                 {
-                    foreach (var cat in categoryAssignRequest.Categories)
-                    {
-                        if (catOfProduct.CategoryId == int.Parse(cat.Id))
-                            cat.Selected = true;
-                    }
+                    if (product.ResultObj.Categories.CategoryId == int.Parse(cat.Id))
+                        cat.Selected = true;
                 }
             var editRequest = new EditProductRequest()
             {
@@ -155,7 +153,7 @@ namespace BookStore.AdminApp.Controllers
                 LanguageId = languageId,
                 CategoryAssign = categoryAssignRequest,
                 ShowDefaultImage = product.ResultObj.ShowDefaultImage,
-                ShowProductImages = product.ResultObj.ShowProductImages,
+                ShowProductImages = product.ResultObj.ShowProductImages != null ? product.ResultObj.ShowProductImages : new List<string>() { SystemConstants.ProductSettings.ErrorImage },
             };
 
             return View(editRequest);
