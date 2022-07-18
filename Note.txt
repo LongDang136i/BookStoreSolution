@@ -1,0 +1,121 @@
+﻿
+########################################################################
+## Tokens, Keywords in appsettings,lauchSettings
+
+"ConnectionStrings": {
+    "BookStoreSolutionDb": "Server=.;Database=BookStoreSolution;Trusted_Connection=True;"
+  }
+
+  "DefaultLanguageId": "en",
+
+  "Tokens": {
+    "Key": "0123456789ABCDEF",
+    "Issuer": "https://bookstore.com"
+  }
+
+
+
+
+
+
+
+// Note
+
+//---------------------------------------------------------------------------------//
+#region Private Menthod
+
+
+#endregion
+
+//---------------------------------------------------------------------------------//
+#region Admin App
+
+
+#endregion
+
+//---------------------------------------------------------------------------------//
+#region Both Admin & Web App
+
+
+#endregion
+
+//---------------------------------------------------------------------------------//
+#region Web App
+
+
+#endregion
+
+
+#HTTP Request
+GET: được sử dụng để lấy thông tin từ server theo URI đã cung cấp.
+HEAD: giống với GET nhưng response trả về không có body, chỉ có header.
+POST: gửi thông tin tới sever thông qua các biểu mẫu http.
+PUT: ghi đè tất cả thông tin của đối tượng với những gì được gửi lên.
+PATCH: ghi đè các thông tin được thay đổi của đối tượng.
+DELETE: xóa tài nguyên trên server.
+CONNECT: thiết lập một kết nối tới server theo URI.
+OPTIONS: mô tả các tùy chọn giao tiếp cho resource.
+TRACE: thực hiện một bài test loop – back theo đường dẫn đến resource.
+
+#Status code
+200 OK – Trả về thành công cho những phương thức GET, PUT, PATCH hoặc DELETE.
+201 Created – Trả về khi một Resouce vừa được tạo thành công.
+204 No Content – Trả về khi Resource xoá thành công.
+304 Not Modified – Client có thể sử dụng dữ liệu cache.
+400 Bad Request – Request không hợp lệ
+401 Unauthorized – Request cần có auth.
+403 Forbidden – bị từ chối không cho phép.
+404 Not Found – Không tìm thấy resource từ URI
+405 Method Not Allowed – Phương thức không cho phép với user hiện tại.
+410 Gone – Resource không còn tồn tại, Version cũ đã không còn hỗ trợ.
+415 Unsupported Media Type – Không hỗ trợ kiểu Resource này.
+422 Unprocessable Entity – Dữ liệu không được xác thực
+429 Too Many Requests – Request bị từ chối do bị giới hạn
+
+
+
+
+#API
+- Trong ApiIntegration:
+    -- Phương thức GET nên trả về kiểu dữ liệu là "ApiSuccessResult <result>.ResultObj" khi thành công
+    -- Các phương thức còn lại nên trả về đối tượng "ApiSuccessResult<result>" khi thành công
+
+
+- Trong BackEndApi
+    -- Phương thức GET nên ktra dữ liệu đầu ra
+    -- Các phương thức còn lại nên ktra cả dữ liệu đầu vào và ra
+
+- Trong Application
+    -- Các phương thức PUT,DEL,POST nên có <result>.Message cho cả trường hợp thành công và lỗi
+
+
+- Trong Service
+    -- Nếu lấy thông tin của đối tượng trong nhiều bảng dữ liệu dùng cấu trúc:
+        #--------------------------------------
+            var data= from p in _context.Products
+                    join pt in _context.ProductTranslations on p.ProductId equals pt.ProductId                        
+                    join pi in _context.ProductImages on p.ProductId equals pi.ProductId into ppi
+                    from pi in ppi.DefaultIfEmpty()
+                    where pt.LanguageId == languageId && pi.IsDefault == true
+                    select new { p, pt, pi };     
+        
+
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new ProductVm()
+                {
+                    ProductId = x.p.ProductId,
+                    ...
+                    DefaultImage = new ProductImageVm()
+                    {
+                        ImagePath = x.pi.ImagePath,
+                       ...
+                    }
+                }).ToListAsync();
+        #--------------------------------------
+
+    -- Nếu lấy thông tin của đối tượng trong 1 bảng dữ liệu dùng cấu trúc:
+        #--------------------------------------
+            var images = await _context.ProductImages.Where(x => x.ProductId == productId && x.IsDefault == false).ToListAsync();
+    
+

@@ -1,11 +1,15 @@
+using BookStore.ApiIntegration;
+using BookStore.ApiIntegration.Interface;
+using BookStore.ViewModels.System.Users.Validators;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +29,41 @@ namespace BookStore.AdminApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddHttpClient();
+
+            /*x*/
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+            {
+                option.LoginPath = "/Login/Index";
+                option.AccessDeniedPath = "/Account/Forbiden/";
+            });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddTransient<IRoleApiClient, RoleApiClient>();
+            services.AddTransient<ILanguageApiClient, LanguageApiClient>();
+            services.AddTransient<IProductApiClient, ProductApiClient>();
+            services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+
+            services.AddControllersWithViews()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+
+            services.AddSession(option =>
+            {
+                option.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+
+            /*Add Razor Runtime Compilation*/
+            IMvcBuilder builder = services.AddRazorPages();
+
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+#if DEBUG
+            if (environment == Environments.Development)
+            {
+                builder.AddRazorRuntimeCompilation();
+            }
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,16 +73,29 @@ namespace BookStore.AdminApp
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
+            app.UseSession();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,0 +1,159 @@
+﻿@using eShopSolution.WebApp.Models
+
+@model CheckoutViewModel
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        setTimeout(function(){
+            $('#msgAlert').fadeOut('slow');
+        },2000);        
+    </script>
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@{
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+  <!--================Home Banner Area =================-->
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div
+            class="banner_content d-md-flex justify-content-between align-items-center"
+          >
+            <div class="mb-3 mb-md-0">
+              <h2>Checkout</h2>
+              <p>Confirm oder and check out</p>
+            </div>
+           
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+
+@if (TempData["SuccessMsg"] != null)
+{
+    
+    <div class="cart_area"  style="padding:30px 0px">
+
+      <div class="container">
+          <span id="msgAlert" class="alert alert-success">@TempData["SuccessMsg"]</span>
+          <br/>
+          <hr/>
+        <div class="cart_inner">
+          <div class="table-responsive">
+            <table class="table" id="tbl_cart" style="border-bottom:inset;">
+            <thead>
+                <tr>                    
+                  <th style="text-align: center; font-size:25px;" scope="col">Product</th>
+                  <th style="text-align: center; font-size:25px;"  scope="col">Price</th>
+                  <th style="text-align: center; font-size:25px;" scope="col">Quantity</th>
+                  <th style="text-align: center; font-size:25px;" scope="col">Total</th>
+                </tr>
+              </thead>     
+            </table>
+          </div>
+          </div>
+          </div>
+          </div>
+}
+else
+{   
+  
+
+    <!--================Cart Area =================-->
+    <div class="cart_area">
+      <div class="container">
+        <div class="cart_inner">
+          <div class="table-responsive">
+            <table class="table" id="tbl_cart" style="border-bottom:inset;">
+              <thead>
+                <tr>                    
+                  <th style="text-align: center; font-size:25px;" scope="col">Product</th>
+                  <th style="text-align: center; font-size:25px;"  scope="col">Price</th>
+                  <th style="text-align: center; font-size:25px;" scope="col">Quantity</th>
+                  <th style="text-align: center; font-size:25px;" scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                  @foreach (var item in Model.CartItems)
+                  {
+                  <tr>
+                    <td> 
+                        <div style="text-align:center;" class="media" > 
+                            <div class="d-flex"> 
+                                <img style="text-align:center;width: 100px; height:auto;" src="@(Configuration["BaseAddress"] + item.ShowDefaultImage)" alt=""/>
+                            </div > 
+                            <div class="media-body"><p style="font-size:20px">@item.Name</p></div> 
+                         </div>
+                    </td>
+                    <td style="font-size:20px;text-align:center;">@item.Price.ToString("C",CultureInfo.CurrentCulture)</td>
+                    <td>
+                        <div style="font-size:20px;text-align:center;" >
+                            @item.Quantity
+                        </div>
+                     </td>
+                     <td style="font-size:20px;text-align:center;">@((item.Quantity*item.Price).ToString("C",CultureInfo.CurrentCulture))</td>
+                   </tr>
+                   }                               
+              </tbody>
+              <tfoot>
+                  <tr>
+                    <td colspan="3" style="text-align:right; padding-right:50px;font-size:22px;">TOTAL =</td>
+                    <td class="label label-important" style="display:block;text-align: center;"> <span id="lbl_total"style="font-size:25px; color:#71cd14">@Model.CartItems.Sum(x => x.Quantity * x.Price).ToString("C",CultureInfo.CurrentCulture)</span></td>                    
+                </tr>
+              </tfoot>    
+            </table>
+          </div>
+          </div>
+         <div class="billing_details">
+          <div class="row">
+            <div class="col-lg-8">
+              <h3>Billing Details</h3>              
+                <form class="contact_form" action="/@culture/Cart/Checkout" method="post">
+                    <div class="control-group">
+                        <label class="control-label">Name </label>
+                        <div class="col-md-12 form-group p_star">
+                            <input type="text"  asp-for="CheckoutModel.Name">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="inputCountry">Address </label>
+                         <div class="col-md-12 form-group p_star">
+                            <input type="text"  asp-for="CheckoutModel.Address" >
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputCountry">Email </label>
+                         <div class="col-md-12 form-group p_star">
+                            <input type="text" asp-for="CheckoutModel.Email" >
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputCountry">PhoneNumber </label>
+                         <div class="col-md-12 form-group p_star">
+                            <input type="text" asp-for="CheckoutModel.PhoneNumber">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="main_btn">Purchase </button>
+                        </div>
+                    </div>
+                </form>
+              
+            </div>
+           
+            </div>
+            </div>
+          </div>
+          </div>
+
+}

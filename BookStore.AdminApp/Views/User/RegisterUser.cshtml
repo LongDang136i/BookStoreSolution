@@ -1,0 +1,74 @@
+﻿@model BookStore.ViewModels.System.Users.RegisterRequest
+
+@{
+    ViewData["Title"] = "Create a new User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Create a new User</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Home Page</a></li>
+        <li class="breadcrumb-item active">Create a new User</li>
+    </ol>
+    
+    <div class="row">
+        <div class="col-md-5">
+            <form asp-action="RegisterUser">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="form-label "></label>
+                    <input asp-for="FirstName" class="form-control " />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="form-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dob" class="form-label"></label>
+                    <input asp-for="Dob" class="form-control" />
+                    <span asp-validation-for="Dob" class="text-danger"></span>
+                    <br/>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="form-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserName" class="form-label" ></label>
+                    <input asp-for="UserName" class="form-control" value="" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control" value=""/>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="form-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <hr/>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" style="width:200px; margin:auto;" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <br/>
+        <a class=" btn btn-dark" asp-action="Index">Back to List</a>
+    </div>
+</div>
+
