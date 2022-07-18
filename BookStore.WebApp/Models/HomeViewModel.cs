@@ -9,6 +9,6 @@ namespace BookStore.WebApp.Models
 
         public List<ProductInfoVm> LatestProducts { get; set; }
 
-        public List<ProductInfoVm> CollectionProducts { get; set; }
+        public List<List<ProductInfoVm>> CollectionProducts { get; set; }
     }
 }

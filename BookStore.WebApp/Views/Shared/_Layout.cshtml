@@ -2,6 +2,7 @@
     var culture = CultureInfo.CurrentCulture.Name;
 }
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +15,9 @@
     <title>@ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="@ViewData["Description"]">
+    <link href='https://fonts.googleapis.com/css?family=Anton' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Neucha' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/package/simple-slider/dist/style-slide.css">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="/css/bootstrap.css" />
   <link rel="stylesheet" href="/vendors/linericon/style.css" />
@@ -28,6 +32,8 @@
   <!-- main css -->
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/responsive.css" />
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -59,8 +65,8 @@
                   </a>
                 </li>
                 <li>
-                  <a href="tracking.html">
-                    track order
+                  <a href="/@culture/@_loc["registerUrl"]">
+                    Register
                   </a>
                 </li>
                 <li >
@@ -72,7 +78,7 @@
                     }
                     else
                     {
-                        <a href="/@culture/User/Login" style="padding-right:0">
+                        <a href="/@culture/@_loc["loginUrl"]" style="padding-right:0">
                             Login
                         </a>
                     }                            
@@ -185,6 +191,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   <script src="/js/mail-script.js"></script>
   <script src="/js/theme.js"></script>
   <script src="/js/site.js"></script>
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script><script  src="/package/simple-slider/dist/script-slide.js"></script>
   <script>
         var site = new SiteController();
         site.initialize();

@@ -16,6 +16,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using BookStore.ViewModels.Catalog.Categories;
+using BookStore.ViewModels.Sale;
 
 namespace BookStore.Application.Catalog.Products
 {
@@ -282,7 +283,7 @@ namespace BookStore.Application.Catalog.Products
 
         #region Web App
 
-        public async Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take)
+        public async Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take, string collection)
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.ProductId equals pt.ProductId
@@ -295,20 +296,20 @@ namespace BookStore.Application.Catalog.Products
                         where pt.LanguageId == languageId && pi.IsDefault == true
                         select new { p, pt, pic, pi };
 
-            var data = await query.OrderByDescending(x => x.p.DateCreated).Where(x => x.pt.Name.Contains("Mahouka")).Take(take)
-                .Select(x => new ProductInfoVm()
-                {
-                    ProductId = x.p.ProductId,
-                    Name = x.pt.Name,
-                    Description = x.pt.Description,
-                    LanguageId = x.pt.LanguageId,
-                    Price = x.p.Price,
-                    OriginalPrice = x.p.OriginalPrice,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoTitle = x.pt.SeoTitle,
-                    Stock = x.p.Stock,
-                    ShowDefaultImage = x.pi.ImagePath,
-                }).ToListAsync();
+            var data = await query.OrderByDescending(x => x.p.DateCreated).Where(x => x.pt.Name.Contains(collection)).Take(take)
+            .Select(x => new ProductInfoVm()
+            {
+                ProductId = x.p.ProductId,
+                Name = x.pt.Name,
+                Description = x.pt.Description,
+                LanguageId = x.pt.LanguageId,
+                Price = x.p.Price,
+                OriginalPrice = x.p.OriginalPrice,
+                SeoAlias = x.pt.SeoAlias,
+                SeoTitle = x.pt.SeoTitle,
+                Stock = x.p.Stock,
+                ShowDefaultImage = x.pi.ImagePath,
+            }).ToListAsync();
 
             //Thực thi
             if (data != null)
@@ -389,6 +390,46 @@ namespace BookStore.Application.Catalog.Products
                 return new ApiSuccessResult<List<ProductInfoVm>>(data);
             }
             return new ApiErrorResult<List<ProductInfoVm>>("Problem when get product info!");
+        }
+
+        public async Task<ApiResult<int>> CreateOrder(CheckoutRequest request)
+        {
+
+            //Tạo mới một obj với thông tin nhập vào
+            var order = new Order()
+            {
+                OrderDate = DateTime.Now,
+                ShipAddress = request.Address,
+                ShipEmail = request.Email,
+                ShipName = request.Name,
+                ShipPhoneNumber = request.PhoneNumber,
+               //Status = Data.Enums.OrderStatus.InProgress,
+                //OrderDetails = listOrderDetail
+            };
+
+            //Thêm obj vào csdl và ktra kqua
+            _context.Orders.Add(order);
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+            {
+                foreach (var item in request.OrderDetails)
+                {
+                    var orderDetail = new OrderDetail()
+                    {
+                        OrderId=order.OrderId,
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                    };
+                    _context.OrderDetails.Add(orderDetail);
+                }
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    return new ApiSuccessResult<int>(order.OrderId, "Create new category successful!");
+                }
+                return new ApiErrorResult<int>("Problem when create category!");
+            }
+            return new ApiErrorResult<int>("Problem when create category!");
         }
 
         #endregion Web App

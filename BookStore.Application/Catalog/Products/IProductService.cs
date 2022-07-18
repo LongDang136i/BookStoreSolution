@@ -2,6 +2,7 @@
 using BookStore.ViewModels.Catalog.ProductImages;
 using BookStore.ViewModels.Catalog.Products;
 using BookStore.ViewModels.Common;
+using BookStore.ViewModels.Sale;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -34,13 +35,15 @@ namespace BookStore.Application.Catalog.Products
 
         Task<ApiResult<PagedResult<ProductInfoVm>>> GetProductsPaging(GetProductsPagingRequest request);
 
+        Task<ApiResult<int>> CreateOrder(CheckoutRequest request);
+
         #endregion Both Admin & Web App
 
         //---------------------------------------------------------------------------------//
 
         #region Web App
 
-        Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take);
+        Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take, string collection);
 
         Task<ApiResult<List<ProductInfoVm>>> GetFeaturedProducts(string languageId, int take);
 

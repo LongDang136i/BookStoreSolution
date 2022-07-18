@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using BookStore.ViewModels.Catalog.ProductImages;
+using BookStore.ViewModels.Sale;
 
 namespace BookStore.ApiIntegration
 {
@@ -212,11 +213,12 @@ namespace BookStore.ApiIntegration
 
         #region Web App
 
-        public async Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take)
+        public async Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take, string collection)
         {
-            var data = await GetAsync<ApiResult<List<ProductInfoVm>>>($"/api/products/collection/{languageId}/{take}");
+            var data = await GetAsync<ApiResult<List<ProductInfoVm>>>($"/api/products/collection/{languageId}/{take}/{collection}");
             return data;
         }
+
         public async Task<ApiResult<List<ProductInfoVm>>> GetFeaturedProducts(string languageId, int take)
         {
             var data = await GetAsync<ApiResult<List<ProductInfoVm>>>($"/api/products/featured/{languageId}/{take}");
@@ -227,6 +229,16 @@ namespace BookStore.ApiIntegration
         {
             var data = await GetAsync<ApiResult<List<ProductInfoVm>>>($"/api/products/latest/{languageId}/{take}");
             return data;
+        }
+
+        public async Task<ApiResult<int>> CreateOrder(CheckoutRequest request)
+        {
+            //Biên dịch request ra json và đổi sang kiểu StringContent
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            //Tạo đường dẫn gọi đến BackEndApi thông qua lớp cha để lấy dữ liệu
+            return await PostAsync<ApiResult<int>>($"/api/products/createOder", httpContent);
         }
 
         #endregion Web App

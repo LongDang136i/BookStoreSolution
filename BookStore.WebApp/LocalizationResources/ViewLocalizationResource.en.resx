@@ -152,9 +152,15 @@
     <value>Login</value>
     <comment>Layouts</comment>
   </data>
+  <data name="loginUrl" xml:space="preserve">
+    <value>login</value>
+  </data>
   <data name="productUrl" xml:space="preserve">
     <value>product</value>
     <comment>/Home/Index</comment>
+  </data>
+  <data name="registerUrl" xml:space="preserve">
+    <value>register</value>
   </data>
   <data name="search" xml:space="preserve">
     <value>search</value>

@@ -152,9 +152,15 @@
     <value>Đăng nhập</value>
     <comment>Layouts</comment>
   </data>
+  <data name="loginUrl" xml:space="preserve">
+    <value>dang-nhap</value>
+  </data>
   <data name="productUrl" xml:space="preserve">
     <value>san-pham</value>
     <comment>/Home/Index</comment>
+  </data>
+  <data name="registerUrl" xml:space="preserve">
+    <value>dang-ki</value>
   </data>
   <data name="search" xml:space="preserve">
     <value>tim-kiem</value>

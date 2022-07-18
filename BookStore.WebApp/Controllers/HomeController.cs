@@ -1,5 +1,6 @@
 ﻿using BookStore.ApiIntegration.Interface;
 using BookStore.Utilities.Constants;
+using BookStore.ViewModels.Catalog.Products;
 using BookStore.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -43,10 +44,16 @@ namespace BookStore.WebApp.Controllers
             {
                 viewModel.LatestProducts = latestProducts.ResultObj;
             }
-            var collectionProducts = await _productApiClient.GetCollectionProducts(culture, SystemConstants.ProductSettings.NumberOfCollectionProduct);
-            if (collectionProducts.IsSuccessed)
+            var collections = new List<string>() { "Mahouka Koukou no Rettousei", "Konosuba" };
+            viewModel.CollectionProducts = new List<List<ProductInfoVm>>();
+            foreach (var item in collections)
             {
-                viewModel.CollectionProducts = collectionProducts.ResultObj;
+                var collectionProducts = await _productApiClient.GetCollectionProducts(culture, SystemConstants.ProductSettings.NumberOfCollectionProduct, item);
+                if (collectionProducts.IsSuccessed)
+                {
+                    if (collectionProducts != null)
+                        viewModel.CollectionProducts.Add(collectionProducts.ResultObj);
+                }
             }
             return View(viewModel);
         }

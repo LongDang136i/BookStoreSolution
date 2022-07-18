@@ -123,11 +123,34 @@ namespace BookStore.WebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                   name: "Search En",
-                   pattern: "{culture}/product/search", new
+                      name: "Sign up En",
+                      pattern: "{culture}/register", new
+                      {
+                          controller = "User",
+                          action = "Register"
+                      });
+                endpoints.MapControllerRoute(
+                      name: "Sign up En",
+                      pattern: "{culture}/dang-ki", new
+                      {
+                          controller = "User",
+                          action = "Register"
+                      });
+
+                endpoints.MapControllerRoute(
+                      name: "Login En",
+                      pattern: "{culture}/login", new
+                      {
+                          controller = "User",
+                          action = "Login"
+                      });
+
+                endpoints.MapControllerRoute(
+                   name: "Login vn",
+                   pattern: "{culture}/dang-nhap", new
                    {
-                       controller = "Product",
-                       action = "ProductByKeyword"
+                       controller = "User",
+                       action = "Login"
                    });
 
                 endpoints.MapControllerRoute(

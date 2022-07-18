@@ -21,7 +21,7 @@ namespace BookStore.Utilities.Constants
         public class ProductSettings
         {
             public const int NumberOfCollectionProduct = 5;
-            public const int NumberOfProductPerPage = 6;
+            public const int NumberOfProductPerPage = 12;
             public const int NumberOfFeaturedProducts = 3;
             public const int NumberOfLatestProducts = 8;
             public const string ErrorImage = "/user-content/error-image.jpg";

@@ -1,8 +1,10 @@
 ﻿using BookStore.Application.Catalog.Products;
 using BookStore.ViewModels.Catalog.ProductImages;
 using BookStore.ViewModels.Catalog.Products;
+using BookStore.ViewModels.Sale;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BookStore.BackEndApi.Controllers
@@ -102,12 +104,12 @@ namespace BookStore.BackEndApi.Controllers
 
         #region Web App
 
-        [HttpGet("collection/{languageId}/{take}")]
+        [HttpGet("collection/{languageId}/{take}/{collection}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetCollectionProducts(string languageId, int take)
+        public async Task<IActionResult> GetCollectionProducts(string languageId, int take, string collection)
         {
             //Lấy ds sản phẩm mới nhất
-            var products = await _productService.GetCollectionProducts(languageId, take);
+            var products = await _productService.GetCollectionProducts(languageId, take, collection);
             if (products == null)
             {
                 return BadRequest();
@@ -155,6 +157,22 @@ namespace BookStore.BackEndApi.Controllers
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("createOder")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateOrder([FromBody] CheckoutRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _productService.CreateOrder(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result.Message);
             }
             return Ok(result);
         }

@@ -97,7 +97,7 @@ namespace BookStore.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Checkout(CheckoutViewModel request)
+        public async Task<IActionResult> Checkout(CheckoutViewModel request)
         {
             var model = GetCheckoutViewModel();
             var orderDetails = new List<OrderDetailVm>();
@@ -106,7 +106,8 @@ namespace BookStore.WebApp.Controllers
                 orderDetails.Add(new OrderDetailVm()
                 {
                     ProductId = item.ProductId,
-                    Quantity = item.Quantity
+                    Quantity = item.Quantity,
+                    Price = item.Price,
                 });
             }
             var checkoutRequest = new CheckoutRequest()
@@ -117,10 +118,16 @@ namespace BookStore.WebApp.Controllers
                 PhoneNumber = request.CheckoutModel.PhoneNumber,
                 OrderDetails = orderDetails
             };
-            //TODO: Add to API
-            TempData["SuccessMsg"] = "Order puschased successful";
-            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
-            HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
+            var createOrder = await _productApiClient.CreateOrder(checkoutRequest);
+            if (createOrder.IsSuccessed)
+            {
+                TempData["SuccessMsg"] = "Order puschased successful";
+                List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+                HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
+                return View(model);
+            }
+            TempData["SuccessMsg"] = "Fail to create order";
+
             return View(model);
         }
 

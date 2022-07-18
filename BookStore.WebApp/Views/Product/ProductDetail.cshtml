@@ -194,12 +194,13 @@
           </li>
         </ul>
         <div class="tab-content" id="myTabContent">
-          <div
+          <div style="list-style-type:circle;"
             class="tab-pane fade"
             id="home"
             role="tabpanel"
             aria-labelledby="home-tab"
           >
+
            @Html.Raw(WebUtility.HtmlDecode(Model.Product.Details))
           </div>
           <div

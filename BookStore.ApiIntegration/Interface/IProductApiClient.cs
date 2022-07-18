@@ -1,6 +1,7 @@
 ﻿using BookStore.ViewModels.Catalog.ProductImages;
 using BookStore.ViewModels.Catalog.Products;
 using BookStore.ViewModels.Common;
+using BookStore.ViewModels.Sale;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -36,11 +37,13 @@ namespace BookStore.ApiIntegration.Interface
 
         #region Web App
 
-        Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take);
+        Task<ApiResult<List<ProductInfoVm>>> GetCollectionProducts(string languageId, int take, string collections);
 
         Task<ApiResult<List<ProductInfoVm>>> GetFeaturedProducts(string languageId, int take);
 
         Task<ApiResult<List<ProductInfoVm>>> GetLatestProducts(string languageId, int take);
+
+        Task<ApiResult<int>> CreateOrder(CheckoutRequest request);
 
         #endregion Web App
     }
