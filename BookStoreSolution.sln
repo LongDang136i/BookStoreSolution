@@ -31,14 +31,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.AdminApp", "BookS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.WebApp", "BookStore.WebApp\BookStore.WebApp.csproj", "{68BF8D4C-FB78-4540-B8D9-928BE81BA5AF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Image demo", "Image demo", "{48B26A40-012C-42CD-BC27-0F80A48BE003}"
-	ProjectSection(SolutionItems) = preProject
-		C:\Users\GIn TonIc\Downloads\1.jpg = C:\Users\GIn TonIc\Downloads\1.jpg
-		C:\Users\GIn TonIc\Downloads\2.jpg = C:\Users\GIn TonIc\Downloads\2.jpg
-		C:\Users\GIn TonIc\Downloads\3.jpg = C:\Users\GIn TonIc\Downloads\3.jpg
-		C:\Users\GIn TonIc\Downloads\4.jpg = C:\Users\GIn TonIc\Downloads\4.jpg
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,7 +82,6 @@ Global
 		{2C14AE7D-7A41-4264-9DCC-A23C8502086C} = {F5720EDA-FC99-434E-A2FC-F3747514BB7D}
 		{2B9E4196-FA62-4463-91F0-E6D24599E7B6} = {F5720EDA-FC99-434E-A2FC-F3747514BB7D}
 		{68BF8D4C-FB78-4540-B8D9-928BE81BA5AF} = {F5720EDA-FC99-434E-A2FC-F3747514BB7D}
-		{48B26A40-012C-42CD-BC27-0F80A48BE003} = {B680E8D4-7D89-4FA2-9FAA-D11F5BBB4149}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DCE7B9EA-C850-4785-9E61-D59F618066BE}
